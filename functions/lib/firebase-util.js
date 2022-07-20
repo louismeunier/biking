@@ -33,7 +33,6 @@ async function getTestData(db) {
  */
 async function getActivities(db) {
     const data = await db.collection('activities').get()
-    db.terminate();
     return data.docs.map(doc => doc.data())
 }
 
@@ -43,7 +42,6 @@ async function getActivities(db) {
  */
 async function postActivity(activity, db) {
     const ref = await db.collection('activities').doc(activity.id).set(activity);
-    db.terminate();
 }
 
 /**
@@ -52,7 +50,6 @@ async function postActivity(activity, db) {
  */
 async function getAuth(db) {
     const auth = await db.collection("strava-auth").doc("auth").get();
-    db.terminate();
     console.log(auth.data())
     return auth.data();
 }
@@ -69,7 +66,6 @@ async function setAuth(accessToken, expiresAt, refreshToken, db) {
         expires_at: expiresAt,
         refresh_token: refreshToken
     })
-    db.terminate();
 }
 
 module.exports = {
