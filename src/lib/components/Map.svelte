@@ -74,7 +74,7 @@
     }).addTo(map);
 
     const activities = await getActivities();
-    const activitiesLayer = leaflet.layerGroup(activities.map(activity => {
+    const activitiesLayer = leaflet.layerGroup(activities.filter(a => a.type == "Ride").map(activity => {
       const testltln = decodePolyline(activity.map);
       return leaflet.polyline(testltln, {
         color: 'red',

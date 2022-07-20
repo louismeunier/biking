@@ -53,6 +53,7 @@ async function getActivity(activityId, db) {
     const fmtData =  {
         id: activity.id,
         name: activity.name,
+        type: activity.type,
         distance: activity.distance,
         moving_time: activity.moving_time,
         elapsed_time: activity.elapsed_time,
