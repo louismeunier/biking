@@ -15,7 +15,6 @@ async function authorize() {
 
     // Set up an instance of the DB
     const db = admin.firestore()
-
     return db;
 }
 
@@ -36,6 +35,7 @@ async function getTestData() {
 async function getActivities() {
     const db = await authorize();
     const data = await db.collection('activities').get()
+    db.terminate();
     return data.docs.map(doc => doc.data())
 }
 
@@ -46,6 +46,7 @@ async function getActivities() {
 async function postActivity(activity) {
     const db = await authorize();
     const ref = await db.collection('activities').doc(activity.id).set(activity);
+    db.terminate();
 }
 
 /**
@@ -54,7 +55,8 @@ async function postActivity(activity) {
  */
 async function getAuth() {
     const db = await authorize();
-    const auth = await db.collection("strava-auth.auth").doc("auth").get()
+    const auth = await db.collection("strava-auth.auth").doc("auth").get();
+    db.terminate();
     return auth.docs.map(doc => doc.data())
 }
 
@@ -71,6 +73,7 @@ async function setAuth(accessToken, expiresAt, refreshToken) {
         expires_at: expiresAt,
         refresh_token: refreshToken
     })
+    db.terminate();
 }
 
 module.exports = {
