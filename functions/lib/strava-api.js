@@ -76,15 +76,13 @@ async function getActivity(activityId, db) {
  */
 async function listActivityIds(db) {
     const authToken = await getAuthorizationToken(db);
-    console.log(authToken)
     const startDate = new Date().getTime();
     const endDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
     
     const url = BASE_URL(`/athlete/activities?before=${startDate}&after=${endDate}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
-    console.log(response)
     const activities = await response.json();
-    console.log(activities);
+    console.log(activities)
     return activities.map(activity => activity.id);
 }
 
