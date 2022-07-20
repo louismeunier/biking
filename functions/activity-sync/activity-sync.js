@@ -15,7 +15,7 @@ const handler = async (event) => {
     await Promise.all(activities.map(async (activity) => {
       await postActivity(activity, db);
     }));
-
+    await db.terminate()
     return {
       statusCode: 200,
       body: JSON.stringify(activities)
