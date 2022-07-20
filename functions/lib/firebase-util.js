@@ -22,18 +22,16 @@ async function authorize() {
  * Test function
  * @returns {Promise<admin.firestore.Firestore>}
  */
-async function getTestData() {
-    const db = await authorize();
+async function getTestData(db) {
     const data = await db.collection('activities').get()
     return data.docs.map(doc => doc.data())
 }
 
 /**
  * Gets list of Strava activities from Firestore
- * @returns {Promise<admin.firestore.Firestore>}
+ * @returns {*}
  */
-async function getActivities() {
-    const db = await authorize();
+async function getActivities(db) {
     const data = await db.collection('activities').get()
     db.terminate();
     return data.docs.map(doc => doc.data())
@@ -43,8 +41,7 @@ async function getActivities() {
  * Posts an activity to Firestore
  * @param {*} activity 
  */
-async function postActivity(activity) {
-    const db = await authorize();
+async function postActivity(activity, db) {
     const ref = await db.collection('activities').doc(activity.id).set(activity);
     db.terminate();
 }
@@ -53,8 +50,7 @@ async function postActivity(activity) {
  * Get authorization object from Firestore
  * @returns {Promise<admin.firestore.Firestore>}
  */
-async function getAuth() {
-    const db = await authorize();
+async function getAuth(db) {
     const auth = await db.collection("strava-auth").doc("auth").get();
     db.terminate();
     console.log(auth.data())
@@ -67,8 +63,7 @@ async function getAuth() {
  * @param {number} expiresAt 
  * @param {string} refreshToken 
  */
-async function setAuth(accessToken, expiresAt, refreshToken) {
-    const db = await authorize();
+async function setAuth(accessToken, expiresAt, refreshToken, db) {
     await db.collection("strava-auth").doc("auth").set({
         access_token: accessToken,
         expires_at: expiresAt,

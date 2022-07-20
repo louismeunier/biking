@@ -1,8 +1,9 @@
-import { postActivity } from "../lib/firebase-util"
+import { postActivity, authorize } from "../lib/firebase-util"
 import { listActivityIds, getActivity } from "../lib/strava-api"
 
 const handler = async (event) => {
   try {
+    const db = await authorize();
     const activityIds = await listActivityIds();
     console.log(activityIds);
     const activities = await Promise.all(activityIds.map(async (id) => {
@@ -12,7 +13,7 @@ const handler = async (event) => {
 
     console.log(activities);
     await Promise.all(activities.map(async (activity) => {
-      await postActivity(activity);
+      await postActivity(activity, db);
     }));
 
     return {
