@@ -3,6 +3,7 @@ import { listActivityIds, getActivity } from "../lib/strava-api"
 
 const handler = async (event) => {
   try {
+    const force = event.queryStringParameters.force || false;
     const admin = await authorize();
     const db = admin.firestore();
 
@@ -13,7 +14,7 @@ const handler = async (event) => {
 
     const missingIds = activityIds.filter(id => !dbActivitiesIds.includes(id));
 
-    if (missingIds.length == 0) {
+    if (missingIds.length == 0 && !force) {
       await db.terminate();
       await admin.app().delete();
       
