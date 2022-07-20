@@ -6,6 +6,9 @@ const handler = async function () {
   const admin = await authorize();
   const db = admin.firestore();
   const data = await getActivities(db);
+  
+  await db.terminate();
+  await admin.app().delete();
   return {
     statusCode: 200,
     body: JSON.stringify(data)
