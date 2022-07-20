@@ -27,8 +27,8 @@ async function getRefreshToken(refreshToken) {
  * Gets the authorization token for the Strava API. If it has expired, it refreshes the token and sets it in the database.
  * @returns {Promise} The authorization token
  */
-async function getAuthorizationToken() {
-    let auth = await getAuth();
+async function getAuthorizationToken(db) {
+    let auth = await getAuth(db);
     console.log(auth);
     if (auth.expires_at < new Date().getTime() - 60) {
         auth = await getRefreshToken(auth.refresh_token);
