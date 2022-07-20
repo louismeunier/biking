@@ -1,28 +1,11 @@
 // https://github.com/jhermsmeier/node-google-polyline
 var PRECISION = 1e5
 
-module.exports = function decode( value ) {
-
-  var points = []
-  var lat = 0
-  var lon = 0
-
-  var values = decode.integers( value, function( x, y ) {
-    lat += x
-    lon += y
-    points.push([ lat / PRECISION, lon / PRECISION ])
-  })
-
-  return points
-
-}
-
-decode.sign = function( value ) {
+function sign(value) {
   return value & 1 ? ~( value >>> 1 ) : ( value >>> 1 )
 }
 
-decode.integers = function( value, callback ) {
-
+function integers(value, callback) {
   var values = 0
   var x = 0
   var y = 0
@@ -39,9 +22,9 @@ decode.integers = function( value, callback ) {
 
     if( byte < 0x20 ) {
       if( ++values & 1 ) {
-        x = decode.sign( current )
+        x = sign( current )
       } else {
-        y = decode.sign( current )
+        y = sign( current )
         callback( x, y )
       }
       current = 0
@@ -51,5 +34,19 @@ decode.integers = function( value, callback ) {
   }
 
   return values
+}
+
+export default function decodePolyline( value ) {
+  var points = []
+  var lat = 0
+  var lon = 0
+
+  var values = integers( value, function( x, y ) {
+    lat += x
+    lon += y
+    points.push([ lat / PRECISION, lon / PRECISION ])
+  })
+
+  return points
 
 }

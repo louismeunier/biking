@@ -8,12 +8,20 @@
 
     import { onMount } from "svelte";
 
+    async function getActivities() {
+      const request = await fetch("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
+      const activities = await request.json();
+      return activities;
+    }
+
     import { pointsOfInterest } from "../data/constants";
     import trail from "../data/eriecanalway.gpx?raw";
+import decodePolyline from "./decode-polyline";
 
-    function loadMap() {
+    async function loadMap() {
       const map = leaflet.map('map').setView([42.77, -73.86], 10);
       
+      // creating layers
       const osmLayer = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
         attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       }).addTo(map);
@@ -53,6 +61,18 @@
         }
       }).addTo(map);
 
+      const activities = await getActivities();
+      const activitiesLayer = leaflet.layerGroup(activities.map(activity => {
+        const testltln = decodePolyline(activity.map);
+        return leaflet.polyline(testltln, {
+          color: 'green',
+          weight: 7,
+          opacity: 0.3,
+          smoothFactor: 1,
+          noClip: false,
+        })
+      }));
+
       const baseMaps = {
         "OpenStreetMap": osmLayer,
         "Satellite": satteliteLayer
@@ -60,7 +80,8 @@
       
       const overlayMaps = {
           "Points of Interest": poisLayer,
-          "Trail": gpxLayer
+          "Trail": gpxLayer,
+          "Activities": activitiesLayer
       };
 
       var layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
