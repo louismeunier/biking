@@ -1,14 +1,15 @@
 <script lang="ts">
     import leaflet from "leaflet";
     import "leaflet/dist/leaflet.css";
-    import "leaflet/dist/images/marker-icon.png";
+    import markerShadow from "/marker-shadow.png";
+    import markerIcon from "/marker-icon.png";
+    
     import gpx from "leaflet-gpx";
 
     import { onMount } from "svelte";
 
     import { pointsOfInterest } from "../data/constants";
     import trail from "../data/eriecanalway.gpx?raw";
-
 
     function loadMap() {
       const map = leaflet.map('map').setView([42.77, -73.86], 10);
@@ -22,7 +23,16 @@
       })
 
       const poisLayer = leaflet.layerGroup(pointsOfInterest.map(point => {
-        var marker = leaflet.marker(point.coordinates)
+        var marker = leaflet.marker(point.coordinates, {
+          icon: leaflet.icon({
+            iconUrl: markerIcon,
+            shadowUrl: markerShadow,
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowSize: [41, 41]
+          })
+        })
         marker.bindPopup(point.name);
         return marker;
       }));
