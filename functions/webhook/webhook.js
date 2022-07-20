@@ -1,4 +1,4 @@
-import { postActivity } from "../lib/firebase-util";
+const { postActivity } = require("../lib/firebase-util");
 
 const handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
