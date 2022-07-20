@@ -1,7 +1,7 @@
 const admin = require('firebase-admin')
 
 async function authorize() {
-    const serviceAccount = process.env.NODE_ENV 
+    const serviceAccount = process.env.NETLIFY
     ? JSON.parse(process.env.SERVICE_ACCOUNT)
     : require('./serviceAccount.json')
 
