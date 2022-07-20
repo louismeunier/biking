@@ -55,7 +55,7 @@ async function postActivity(activity) {
  */
 async function getAuth() {
     const db = await authorize();
-    const auth = await db.collection("strava-auth.auth").doc("auth").get();
+    const auth = await db.collection("strava-auth").doc("auth").get();
     db.terminate();
     console.log(auth.data())
     return auth.data();
@@ -69,7 +69,7 @@ async function getAuth() {
  */
 async function setAuth(accessToken, expiresAt, refreshToken) {
     const db = await authorize();
-    await db.collection("strava-auth.auth").doc("auth").set({
+    await db.collection("strava-auth").doc("auth").set({
         access_token: accessToken,
         expires_at: expiresAt,
         refresh_token: refreshToken
