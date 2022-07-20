@@ -1,9 +1,11 @@
 const fetch = require('node-fetch')
-import { getActivities } from '../lib/firebase-util';
+import { getActivities, authorize } from '../lib/firebase-util';
 
 // get all activities from the database
 const handler = async function () {
-  const data = await getActivities();
+  const admin = await authorize();
+  const db = admin.firestore();
+  const data = await getActivities(db);
   return {
     statusCode: 200,
     body: JSON.stringify(data)
