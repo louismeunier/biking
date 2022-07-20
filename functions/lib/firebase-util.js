@@ -41,7 +41,7 @@ async function getActivities(db) {
  * @param {*} activity 
  */
 async function postActivity(activity, db) {
-    const ref = await db.collection('activities').doc(activity.id).set(activity);
+    const ref = await db.collection('activities').doc(`${activity.id}`).set(activity);
 }
 
 /**
