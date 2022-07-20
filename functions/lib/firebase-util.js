@@ -32,8 +32,9 @@ async function getTestData(db) {
  * @returns {*}
  */
 async function getActivities(db) {
-    const data = await db.collection('activities').get()
-    return data.docs.map(doc => doc.data())
+    const ref = db.collection('activities');
+    const data = await ref.get()
+    return data.map(doc => doc.data())
 }
 
 /**
