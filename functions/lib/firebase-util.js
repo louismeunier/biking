@@ -57,7 +57,8 @@ async function getAuth() {
     const db = await authorize();
     const auth = await db.collection("strava-auth.auth").doc("auth").get();
     db.terminate();
-    return auth.docs.map(doc => doc.data())
+    console.log(auth.data())
+    return auth.data();
 }
 
 /**
