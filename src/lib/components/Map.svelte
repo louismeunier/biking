@@ -103,9 +103,3 @@
 </script>
 
 <div id="map"></div>
-
-<style>
-  #map {
-    height: 80vh;
-  }
-</style>

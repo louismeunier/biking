@@ -27,12 +27,52 @@
 
 <Map/>
 <SvelteToast/>
+<div id="footer">
+    <h1>Bike Trail Visualizer</h1>
+    <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
+</div>
 <button>
     <img src="/sync.png" alt="Synchronize DB with strava" height="30px" on:click="{handleClick}"/>
 </button>
 
 <style>
+    :root {
+        font-family: "Source Code Pro", monospace;
+    }
+    :global(#app) {
+        display: flex;
+        flex-direction: column;
+        margin: 0;
+        padding: 0;
+        width: 100vw;
+        height: 100vh;
+    }
+
+    :global(body) {
+        margin: 0;
+        padding: 0;
+    }
+
+    :global(#map) {
+        height: 85%;
+    }
+
     button {
-        margin-top: 10px;
+        position: absolute;
+        bottom: 0;
+        right: 0;
+        width: fit-content;
+        display: grid;
+        place-items: center;
+        padding: 8px;
+        margin: 2px;
+        background-color: #3E92CC;
+        border-radius: 100%;
+    }
+
+    #footer {
+        display: flex;
+        flex-direction: column;
+        text-align: center;
     }
 </style>
