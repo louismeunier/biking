@@ -1,6 +1,7 @@
 <script lang="ts">
     import leaflet from "leaflet";
     import "leaflet/dist/leaflet.css";
+    import "leaflet/dist/images/marker-icon.png";
     import gpx from "leaflet-gpx";
 
     import { onMount } from "svelte";
@@ -21,9 +22,7 @@
       })
 
       const poisLayer = leaflet.layerGroup(pointsOfInterest.map(point => {
-      var marker = leaflet.marker(
-        point.coordinates
-      )
+        var marker = leaflet.marker(point.coordinates)
         marker.bindPopup(point.name);
         return marker;
       }));
