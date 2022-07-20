@@ -50,7 +50,7 @@ async function getActivity(activityId, db) {
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activity = await response.json();
 
-    return {
+    const fmtData =  {
         id: activity.id,
         name: activity.name,
         distance: activity.distance,
@@ -68,6 +68,14 @@ async function getActivity(activityId, db) {
         max_heartrate: activity.max_heartrate,
         calories: activity.calories
     }
+
+    Object.keys(fmtData).forEach(key => {
+        if (fmtData[key] === undefined) {
+            fmtData[key] = null;
+        }
+    }
+    );
+    return fmtData;
 }
 
 /**
