@@ -14,7 +14,9 @@ async function authorize() {
     })
 
     // Set up an instance of the DB
-    const db = admin.firestore()
+    const db = admin.firestore().settings({
+        ignoreUndefinedProperties: true,
+    })
     return db;
 }
 
