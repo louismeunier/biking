@@ -80,8 +80,9 @@ async function listActivityIds() {
     
     const url = BASE_URL(`/athlete/activities?before=${startDate}&after=${endDate}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
+    console.log(response)
     const activities = await response.json();
-
+    console.log(activities);
     return activities.map(activity => activity.id);
 }
 
