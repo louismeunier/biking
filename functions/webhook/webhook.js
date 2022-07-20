@@ -32,9 +32,26 @@ const handler = async (event, context) => {
 
     await postActivity(activityData, db);
 
+    await db.terminate();
+    await admin.app().delete();
+
     return {
       statusCode: 200,
       body: JSON.stringify({"message": "Activity synced"})
+    }
+  } else if (event.body.aspect_type == "delete") {
+    const activityId = event.body.object_id;
+    const admin = await authorize();
+    const db = admin.firestore();
+
+    await deleteActivity(activityId, db);
+
+    await db.terminate();
+    await admin.app().delete();
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({"message": "Activity deleted"})
     }
   } else {
     return {

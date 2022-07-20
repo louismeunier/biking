@@ -47,6 +47,15 @@ async function postActivity(activity, db) {
 }
 
 /**
+ * Deletes an activity from Firestore
+ * @param {*} activityId 
+ * @param {*} db 
+ */
+async function deleteActivity(activityId, db) {
+    await db.collection("activities").doc(`${activityId}`).delete();
+}
+
+/**
  * Get authorization object from Firestore
  * @returns {Promise<admin.firestore.Firestore>}
  */
