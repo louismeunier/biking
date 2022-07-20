@@ -5,9 +5,11 @@ async function authorize() {
     ? JSON.parse(process.env.SERVICE_ACCOUNT)
     : require('./serviceAccount.json')
 
+    console.log(serviceAccount)
+
     // Initialise the admin with the credentials
     admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+        credential: admin.credential.cert(serviceAccount)
     })
 
     // Set up an instance of the DB
@@ -17,7 +19,7 @@ async function authorize() {
 }
 
 async function getTestData() {
-    const db = authorize();
+    const db = await authorize();
     const data = await db.collection('activities').get()
     return data.docs.map(doc => doc.data())
 }
