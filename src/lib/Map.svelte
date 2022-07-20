@@ -8,15 +8,27 @@
 
     import { onMount } from "svelte";
 
+    import { toast } from '@zerodevx/svelte-toast';
+    import { themes } from "./toast-themes";
+
     async function getActivities() {
-      const request = await fetch("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
-      const activities = await request.json();
-      return activities;
+      try {
+        toast.push("Loading activitiy data...", { theme: themes.wait });
+        const request = await fetch("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
+        const activities = await request.json();
+        toast.pop();
+        toast.push("Activities loaded!", { theme: themes.success });
+        return activities;
+      } catch (error) {
+        toast.pop()
+        toast.push("Error loading activities!", { theme: themes.error });
+        console.error(error);
+      }
     }
 
     import { pointsOfInterest } from "../data/constants";
     import trail from "../data/eriecanalway.gpx?raw";
-import decodePolyline from "./decode-polyline";
+    import decodePolyline from "./decode-polyline";
 
     async function loadMap() {
       const map = leaflet.map('map').setView([42.77, -73.86], 10);
@@ -71,7 +83,7 @@ import decodePolyline from "./decode-polyline";
           smoothFactor: 1,
           noClip: false,
         })
-      }));
+      })).addTo(map);
 
       const baseMaps = {
         "OpenStreetMap": osmLayer,
