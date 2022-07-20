@@ -19,12 +19,17 @@ const handler = async (event) => {
     await db.terminate();
     await admin.app().delete();
     return {
+      headers: {
+        "Access-Control-Allow-Origin": "*"
+      },
       statusCode: 200,
       body: JSON.stringify(activities)
     }
   } catch (error) {
     console.log(error)
-    return { statusCode: 500, body: error.toString() }
+    return { headers: {
+      "Access-Control-Allow-Origin": "*"
+    }, statusCode: 500, body: error.toString() }
   }
 }
 
