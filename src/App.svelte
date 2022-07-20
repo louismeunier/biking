@@ -1,7 +1,7 @@
 <script lang="ts">
-    import Map from "./lib/Map.svelte";
+    import Map from "./lib/components/Map.svelte";
     import { SvelteToast, toast } from '@zerodevx/svelte-toast'
-    import { themes } from "./lib/toast-themes";
+    import { themes } from "./lib/utils/toast-themes";
 
     function handleClick() {
         const pw = window.prompt("Password")
