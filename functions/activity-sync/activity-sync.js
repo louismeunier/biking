@@ -20,6 +20,7 @@ const handler = async (event) => {
       body: JSON.stringify(activities)
     }
   } catch (error) {
+    console.log(error)
     return { statusCode: 500, body: error.toString() }
   }
 }
