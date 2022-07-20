@@ -31,7 +31,7 @@
     <h1>Bike Trail Visualizer</h1>
     <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
 </div>
-<button>
+<button title="Synchronize database">
     <img src="/sync.png" alt="Synchronize DB with strava" height="30px" on:click="{handleClick}"/>
 </button>
 
@@ -70,6 +70,10 @@
         border-radius: 100%;
     }
 
+    button:hover {
+        cursor: pointer;
+    }
+    
     #footer {
         display: flex;
         flex-direction: column;
