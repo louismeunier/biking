@@ -27,3 +27,5 @@ dist-ssr
 .netlify
 
 dist
+
+serviceAccount.json
