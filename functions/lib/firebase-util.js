@@ -14,8 +14,8 @@ async function authorize() {
     })
 
     // Set up an instance of the DB
-    const db = admin.firestore()
-    return db;
+    // const db = admin.firestore()
+    return admin;
 }
 
 /**
