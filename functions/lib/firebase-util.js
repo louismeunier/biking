@@ -2,7 +2,7 @@ const admin = require('firebase-admin')
 
 /**
  * Authorizes the app with Firebase
- * @returns {Promise<admin.firestore.Firestore>}
+ * @returns {Promise<admin>}
  */
 async function authorize() {
     const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
@@ -17,10 +17,10 @@ async function authorize() {
     // const db = admin.firestore()
     return admin;
 }
-
 /**
  * Test function
- * @returns {Promise<admin.firestore.Firestore>}
+ * @param {*} db
+ * @returns {Promise<string[]>}
  */
 async function getTestData(db) {
     const data = await db.collection('activities').get()
@@ -29,7 +29,8 @@ async function getTestData(db) {
 
 /**
  * Gets list of Strava activities from Firestore
- * @returns {*}
+ * @param {*} db
+ * @returns {Promise<Object[]>}
  */
 async function getActivities(db) {
     const data = await db.collection('activities').get();
@@ -39,6 +40,7 @@ async function getActivities(db) {
 /**
  * Posts an activity to Firestore
  * @param {*} activity 
+ * @param {*} db
  */
 async function postActivity(activity, db) {
     const ref = await db.collection('activities').doc(`${activity.id}`).set(activity);
@@ -59,6 +61,7 @@ async function getAuth(db) {
  * @param {string} accessToken 
  * @param {number} expiresAt 
  * @param {string} refreshToken 
+ * @param {*} db
  */
 async function setAuth(accessToken, expiresAt, refreshToken, db) {
     await db.collection("strava-auth").doc("auth").set({

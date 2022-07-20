@@ -8,6 +8,8 @@ const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 
 /**
  * Gets a new refresh token from Strava.
+ * @param {string} refreshToken The refresh token
+ * @param {*} db
  * @returns {Promise} The refresh token
  */
 async function getRefreshToken(refreshToken, db) {
@@ -26,6 +28,7 @@ async function getRefreshToken(refreshToken, db) {
 
 /**
  * Gets the authorization token for the Strava API. If it has expired, it refreshes the token and sets it in the database.
+ * @param {*} db
  * @returns {Promise} The authorization token
  */
 async function getAuthorizationToken(db) {
@@ -41,6 +44,7 @@ async function getAuthorizationToken(db) {
 /**
  * Gets data for a Strava activity based on its ID.
  * @param {number} activityId The Strava ID of the activity
+ * @param {*} db
  * @returns {Promise} The activity data
  */
 async function getActivity(activityId, db) {
@@ -81,6 +85,7 @@ async function getActivity(activityId, db) {
 
 /**
  * Get a list of Strava activity IDs
+ * @param {*} db
  * @returns {Promise} A list of activity IDs
  */
 async function listActivityIds(db) {
