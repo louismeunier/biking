@@ -10,8 +10,8 @@ const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
  * Gets a new refresh token from Strava.
  * @returns {Promise} The refresh token
  */
-async function getRefreshToken() {
-    const url = BASE_URL(`/oauth/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${auth.refresh_token}`);
+async function getRefreshToken(refreshToken) {
+    const url = BASE_URL(`/oauth/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`);
     const refresh = await fetch(url, { method: "POST" });
     const refreshData = await refresh.json();
 
@@ -31,7 +31,7 @@ async function getAuthorizationToken() {
     let auth = await getAuth();
     console.log(auth);
     if (auth.expires_at < new Date().getTime() - 60) {
-        const auth = await getRefreshToken();
+        auth = await getRefreshToken(auth.refresh_token);
     }
 
     return auth.access_token;
