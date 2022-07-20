@@ -1,4 +1,5 @@
 const { postActivity } = require("../lib/firebase-util");
+const { getActivity } = require("../lib/strava-api");
 
 const handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
@@ -6,8 +7,7 @@ const handler = async (event, context) => {
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-  console.log(event);
-  console.log(event.queryStringParameters)
+
   if (mode && token) {
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
@@ -22,6 +22,19 @@ const handler = async (event, context) => {
         statusCode: 403,
         body: JSON.stringify({'error':'Verification tokens do not match'})
       }
+    }
+  } else if (event.body.aspect_type == "create") {
+    const activityId = event.body.object_id;
+    const admin = await authorize();
+    const db = admin.firestore();
+
+    const activityData = await getActivity(activityId, db);
+
+    await postActivity(activityData, db);
+
+    return {
+      statusCode: 200,
+      body: JSON.stringify({"message": "Activity synced"})
     }
   } else {
     return {
