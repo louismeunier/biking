@@ -42,8 +42,8 @@ async function getAuthorizationToken() {
  * @param {number} activityId The Strava ID of the activity
  * @returns {Promise} The activity data
  */
-async function getActivity(activityId) {
-    const authToken = await getAuthorizationToken();
+async function getActivity(activityId, db) {
+    const authToken = await getAuthorizationToken(db);
 
     const url = BASE_URL(`/activities/${activityId}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
@@ -73,8 +73,8 @@ async function getActivity(activityId) {
  * Get a list of Strava activity IDs
  * @returns {Promise} A list of activity IDs
  */
-async function listActivityIds() {
-    const authToken = await getAuthorizationToken();
+async function listActivityIds(db) {
+    const authToken = await getAuthorizationToken(db);
     const startDate = new Date().getTime();
     const endDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
     
