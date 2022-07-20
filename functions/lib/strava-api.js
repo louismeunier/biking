@@ -18,7 +18,8 @@ async function getRefreshToken(refreshToken) {
     setAuth(
         refreshData.access_token,
         refreshData.expires_at,
-        refreshData.refresh_token
+        refreshData.refresh_token,
+        db
     );
     return refreshData;
 }
