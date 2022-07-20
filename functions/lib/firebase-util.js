@@ -1,10 +1,7 @@
 const admin = require('firebase-admin')
 
 async function authorize() {
-    const serviceAccount = process.env.NETLIFY
-    ? JSON.parse(process.env.SERVICE_ACCOUNT)
-    : require('./serviceAccount.json')
-
+    const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
     console.log(serviceAccount)
 
     // Initialise the admin with the credentials
