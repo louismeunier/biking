@@ -1,12 +1,13 @@
 import { postActivity } from "../lib/firebase-util";
 
-exports.handler = async (event, context) => {
+const handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-
+  console.log(event);
+  console.log(event.queryStringParameters)
   if (mode && token) {
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
@@ -29,3 +30,5 @@ exports.handler = async (event, context) => {
     }
   }
 }
+
+module.exports = { handler }
