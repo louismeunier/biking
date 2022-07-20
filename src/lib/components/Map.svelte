@@ -12,7 +12,8 @@
   import { themes } from "../utils/toast-themes";
   // data
   import { pointsOfInterest } from "../../data/constants";
-  import trail from "../../data/eriecanalway.gpx?raw";
+  import erie from "../../data/eriecanalway.gpx?raw";
+  import hudson from "../../data/hudsonvalleygreenway.gpx?raw";
   import decodePolyline from "../utils/decode-polyline";
 
   let mostRecentActivity = null;
@@ -59,7 +60,7 @@
       return marker;
     }));
 
-    var gpxLayer = new leaflet.GPX(trail, {
+    const gpxErie = new leaflet.GPX(erie, {
       async: true,
       marker_options: {
         startIconUrl: null,
@@ -68,6 +69,22 @@
       },
       polyline_options: {
         color: 'green',
+        weight: 4,
+        opacity: 0.5,
+        smoothFactor: 1,
+        noClip: false,
+      }
+    }).addTo(map);
+
+    const gpxHudson = new leaflet.GPX(hudson, {
+      async: true,
+      marker_options: {
+        startIconUrl: null,
+        endIconUrl: null,
+        shadowUrl: null
+      },
+      polyline_options: {
+        color: 'blue',
         weight: 4,
         opacity: 0.5,
         smoothFactor: 1,
@@ -97,7 +114,8 @@
     
     const overlayMaps = {
         "Points of Interest": poisLayer,
-        "Trail": gpxLayer,
+        "Erie Canalway Trail": gpxErie,
+        "Hudson Valley Greenway Trail": gpxHudson,
         "Activities": activitiesLayer
     };
 
