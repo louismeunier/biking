@@ -15,6 +15,8 @@
   import trail from "../../data/eriecanalway.gpx?raw";
   import decodePolyline from "../utils/decode-polyline";
 
+  let mostRecentActivity = null;
+
   async function getActivities() {
     try {
       toast.push("Loading activitiy data...", { theme: themes.wait });
@@ -74,7 +76,10 @@
     }).addTo(map);
 
     const activities = await getActivities();
-    const activitiesLayer = leaflet.layerGroup(activities.filter(a => a.type == "Ride").map(activity => {
+    const activitiesFiltered = activities.filter(a => a.type == "Ride")
+    mostRecentActivity = activitiesFiltered[activitiesFiltered.length - 1].start_date;
+    console.log(mostRecentActivity)
+    const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
       const testltln = decodePolyline(activity.map);
       return leaflet.polyline(testltln, {
         color: 'red',
@@ -103,3 +108,12 @@
 </script>
 
 <div id="map"></div>
+<p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em> {/if}</p>
+<style>
+  p {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    margin-bottom: 0;
+  }
+</style>
