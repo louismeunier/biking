@@ -1,3 +1,5 @@
+import { postActivity } from "../lib/firebase-util";
+
 exports.handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 

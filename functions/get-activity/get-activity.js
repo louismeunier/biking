@@ -1,8 +1,9 @@
 const fetch = require('node-fetch')
-import { getTestData } from '../lib/firebase-util';
+import { getActivities } from '../lib/firebase-util';
 
+// get all activities from the database
 const handler = async function () {
-  const data = await getTestData();
+  const data = await getActivities();
   return {
     statusCode: 200,
     body: JSON.stringify(data)
