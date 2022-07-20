@@ -66,6 +66,7 @@
         place-items: center;
         padding: 8px;
         margin: 2px;
+        margin-top: 20px;
         background-color: #3E92CC;
         border-radius: 100%;
     }
@@ -78,5 +79,6 @@
         display: flex;
         flex-direction: column;
         text-align: center;
+        margin-bottom: 50px;
     }
 </style>
