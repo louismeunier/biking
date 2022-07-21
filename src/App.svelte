@@ -32,7 +32,7 @@
     <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
 </div>
 <button title="Synchronize database">
-    <img src="/sync.png" alt="Synchronize DB with strava" height="30px" on:click="{handleClick}"/>
+    <img src="/sync.png" alt="Synchronize DB with strava" height="20px" on:click="{handleClick}"/>
 </button>
 
 <style>
@@ -64,10 +64,11 @@
         width: fit-content;
         display: grid;
         place-items: center;
-        padding: 8px;
-        margin: 2px;
+        padding: 4px;
+        margin: 4px;
         margin-top: 20px;
-        background-color: #3E92CC;
+        background-color: #a3c5a3;
+        border: solid 3px black;
         border-radius: 100%;
     }
 
