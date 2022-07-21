@@ -93,7 +93,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(map);
+    }).bindPopup("<strong>Erie Canalway Trail</strong>").addTo(map);
 
     const gpxHudson = new leaflet.GPX(hudson, {
       async: true,
@@ -109,7 +109,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(map);
+    }).bindPopup("<strong>Hudson Valley Greenway Trail</strong>").addTo(map);
 
     const activities:Activity[] = await getActivities();
     const activitiesFiltered = activities.filter(a => a.type == "Ride")
