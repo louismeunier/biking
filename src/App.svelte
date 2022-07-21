@@ -29,6 +29,7 @@
 <SvelteToast/>
 <div id="footer">
     <h1>Bike Trail Visualizer</h1>
+    <img src="/bike.svg" alt="Bike Logo" height="55px"/>
     <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
 </div>
 <button title="Synchronize database">
@@ -67,7 +68,7 @@
         padding: 4px;
         margin: 4px;
         margin-top: 20px;
-        background-color: #a3c5a3;
+        background-color: rgba(128, 128, 128, 0.3);
         border: solid 3px black;
         border-radius: 100%;
     }
