@@ -17,7 +17,6 @@
   import decodePolyline from "../utils/decode-polyline";
 
   let mostRecentActivity = null;
-
   async function getActivities() {
     try {
       toast.push("Loading activitiy data...", { theme: themes.wait });
@@ -31,6 +30,26 @@
       toast.push("Error loading activities!", { theme: themes.error });
       console.error(error);
     }
+  }
+
+  interface Activity {
+    id: number,
+    name: string,
+    type: string,
+    distance: number,
+    moving_time: number,
+    elapsed_time: number,
+    start_date: string,
+    map: string,
+    start_latlng: number[],
+    end_latlng: number[],
+    average_speed: number,
+    max_speed: number,
+    average_watts?: number,
+    kilojoules?: number,
+    average_heartrate?: number,
+    max_heartrate?: number,
+    calories?: number
   }
 
   async function loadMap() {
@@ -92,10 +111,9 @@
       }
     }).addTo(map);
 
-    const activities = await getActivities();
+    const activities:Activity[] = await getActivities();
     const activitiesFiltered = activities.filter(a => a.type == "Ride")
     mostRecentActivity = activitiesFiltered[activitiesFiltered.length - 1].start_date;
-    console.log(mostRecentActivity)
     const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
       const testltln = decodePolyline(activity.map);
       return leaflet.polyline(testltln, {
@@ -104,7 +122,7 @@
         opacity: 0.3,
         smoothFactor: 1,
         noClip: false,
-      })
+      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${Math.floor(activity.distance/1.609)/1000} miles<br>${Math.floor(activity.moving_time/36)/100} hours`);
     })).addTo(map);
 
     const baseMaps = {
@@ -126,7 +144,7 @@
 </script>
 
 <div id="map"></div>
-<p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em> {/if}</p>
+<p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em>{:else} loading... {/if}</p>
 <style>
   p {
     position: absolute;

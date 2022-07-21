@@ -21,6 +21,7 @@
     "vite": "^3.0.0"
   },
   "dependencies": {
+    "@sveltejs/pancake": "^0.0.18",
     "firebase-admin": "^11.0.0",
     "leaflet": "^1.8.0",
     "leaflet-gpx": "^1.7.0",
