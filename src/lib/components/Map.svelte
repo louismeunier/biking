@@ -93,7 +93,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).bindPopup("<strong>Erie Canalway Trail</strong>").addTo(map);
+    }).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Erie Canalway Trail</strong>").addTo(map);
 
     const gpxHudson = new leaflet.GPX(hudson, {
       async: true,
@@ -109,7 +109,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).bindPopup("<strong>Hudson Valley Greenway Trail</strong>").addTo(map);
+    }).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>").addTo(map);
 
     const activities:Activity[] = await getActivities();
     const activitiesFiltered = activities.filter(a => a.type == "Ride")
@@ -151,5 +151,11 @@
     bottom: 0;
     left: 0;
     margin-bottom: 0;
+  }
+  :global(.leaflet-popup-content) {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.3em;
   }
 </style>
