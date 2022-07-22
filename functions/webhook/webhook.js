@@ -8,10 +8,9 @@ const handler = async (event, context) => {
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
   console.log(event.body)
-  console.log(mode)
-  console.log(token)
-  if (mode && token) {
 
+  try {
+  if (mode && token) {
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
       // Responds with the challenge token from the request
       console.log('WEBHOOK_VERIFIED');
@@ -26,6 +25,7 @@ const handler = async (event, context) => {
       }
     }
   } else if (event.body.aspect_type == "create") {
+    console.log("New activity created");
     const activityId = event.body.object_id;
     const admin = await authorize();
     const db = admin.firestore();
@@ -44,6 +44,8 @@ const handler = async (event, context) => {
       body: JSON.stringify({"message": "Activity synced"})
     }
   } else if (event.body.aspect_type == "delete") {
+    console.log("Activity deleted");
+
     const activityId = event.body.object_id;
     const admin = await authorize();
     const db = admin.firestore();
@@ -60,9 +62,16 @@ const handler = async (event, context) => {
       body: JSON.stringify({"message": "Activity deleted"})
     }
   } else {
+    console.log("Something went wrong");
     return {
       statusCode: 400,
       body: JSON.stringify({'error':'Missing mode or token'})
+    }
+  } } catch (error) {
+    console.log(error);
+    return {
+      statusCode: 500,
+      body: JSON.stringify({'error':error})
     }
   }
 }
