@@ -7,8 +7,9 @@ const handler = async (event, context) => {
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-  console.log(JSON.parse(event.body).aspect_type);
-  const aspect_type = JSON.parse(event.body).aspect_type;
+  
+  const body = JSON.parse(event.body);
+  const aspect_type = body.aspect_type;
 
   try {
     if (mode && token) {
@@ -27,7 +28,8 @@ const handler = async (event, context) => {
       }
     } else if (aspect_type == "create") {
       console.log("New activity created");
-      const activityId = event.body.object_id;
+
+      const activityId = body.object_id;
       const admin = await authorize();
       const db = admin.firestore();
 
@@ -47,7 +49,7 @@ const handler = async (event, context) => {
     } else if (aspect_type == "delete") {
       console.log("Activity deleted");
 
-      const activityId = event.body.object_id;
+      const activityId = body.object_id;
       const admin = await authorize();
       const db = admin.firestore();
 
@@ -65,18 +67,6 @@ const handler = async (event, context) => {
     } else if (aspect_type == "update") {
       console.log("Activity updated");
       const activityId = event.body.object_id;
-      // const admin = await authorize();
-      // const db = admin.firestore();
-
-      // const activityData = await getActivity(activityId, db);
-
-      // await postActivity(activityData, db);
-
-      // console.log(`Activity ${activityId} updated in database`);
-
-      // await db.terminate();
-      // await admin.app().delete();
-
       return {
         statusCode: 200,
         body: JSON.stringify({"message": "Activity updated"})
