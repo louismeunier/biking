@@ -7,7 +7,7 @@ const handler = async (event, context) => {
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-
+  console.log(event.body)
   if (mode && token) {
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
@@ -33,7 +33,7 @@ const handler = async (event, context) => {
     await postActivity(activityData, db);
 
     console.log(`Activity ${activityId} added to database`);
-    
+
     await db.terminate();
     await admin.app().delete();
 
