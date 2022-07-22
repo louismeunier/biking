@@ -117,17 +117,11 @@ async function getActivityStreams(activityId, db) {
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activityStream = await response.json();
 
-    let formattedResponse = [];
-    const possibleStreams = activityStream.map(stream => stream.type);
-
-    activityStream[0].data.forEach((point, index) => {
-        let pointData = {};
-        possibleStreams.forEach(possibleStream => {
-           pointData[possibleStream] = activityStream.filter(stream => stream.type == possibleStream)[0].data[index];
-        });
-        formattedResponse.push(pointData);
-    })
-
+    const formattedResponse = {};
+    activityStream.forEach(stream => {
+        formattedResponse[stream.type] = stream.data;
+    });
+    
     return formattedResponse;
 }
 
