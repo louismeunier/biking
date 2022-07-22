@@ -8,6 +8,8 @@ const handler = async (event, context) => {
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
   console.log(event.body)
+  console.log(mode)
+  console.log(token)
   if (mode && token) {
 
     if (mode === 'subscribe' && token === VERIFY_TOKEN) {     
