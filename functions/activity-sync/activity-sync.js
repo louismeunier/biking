@@ -4,10 +4,11 @@ import { listActivityIds, getActivity } from "../lib/strava-api"
 const handler = async (event) => {
   try {
     const force = event.queryStringParameters.force || false;
+    const num = event.queryStringParameters.num;
     const admin = await authorize();
     const db = admin.firestore();
 
-    const activityIds = await listActivityIds(db);
+    const activityIds = await listActivityIds(db, num);
 
     const dbActivities = await getActivities(db);
     const dbActivitiesIds = dbActivities.map(activity => activity.id);

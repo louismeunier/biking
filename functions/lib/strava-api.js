@@ -91,12 +91,14 @@ async function getActivity(activityId, db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise} A list of activity IDs
  */
-async function listActivityIds(db) {
+async function listActivityIds(db, limit) {
     const authToken = await getAuthorizationToken(db);
     // const startDate = new Date().getTime();
     // const endDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
-    
-    const url = BASE_URL("/athlete/activities");
+    if (limit === undefined) {
+        limit = 30;
+    }
+    const url = BASE_URL(`/athlete/activities?per_page=${limit}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activities = await response.json();
 
