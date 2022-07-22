@@ -55,23 +55,23 @@ async function getActivity(activityId, db) {
     const activity = await response.json();
 
     const fmtData =  {
-        id: activity.id,
-        name: activity.name,
-        type: activity.type,
-        distance: activity.distance,
-        moving_time: activity.moving_time,
-        elapsed_time: activity.elapsed_time,
-        start_date: activity.start_date,
-        map: activity.map.polyline,
-        start_latlng: activity.start_latlng,
-        end_latlng: activity.end_latlng,
-        average_speed: activity.average_speed,
-        max_speed: activity.max_speed,
-        average_watts: activity.average_watts,
-        kilojoules: activity.kilojoules,
-        average_heartrate: activity.average_heartrate,
-        max_heartrate: activity.max_heartrate,
-        calories: activity.calories
+        id: activity?.id,
+        name: activity?.name,
+        type: activity?.type,
+        distance: activity?.distance,
+        moving_time: activity?.moving_time,
+        elapsed_time: activity?.elapsed_time,
+        start_date: activity?.start_date,
+        map: activity?.map?.polyline,
+        start_latlng: activity?.start_latlng,
+        end_latlng: activity?.end_latlng,
+        average_speed: activity?.average_speed,
+        max_speed: activity?.max_speed,
+        average_watts: activity?.average_watts,
+        kilojoules: activity?.kilojoules,
+        average_heartrate: activity?.average_heartrate,
+        max_heartrate: activity?.max_heartrate,
+        calories: activity?.calories
     }
 
     Object.keys(fmtData).forEach(key => {
