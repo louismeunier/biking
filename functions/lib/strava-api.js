@@ -9,7 +9,7 @@ const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
 /**
  * Gets a new refresh token from Strava.
  * @param {string} refreshToken The refresh token
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise} The refresh token
  */
 async function getRefreshToken(refreshToken, db) {
@@ -28,7 +28,7 @@ async function getRefreshToken(refreshToken, db) {
 
 /**
  * Gets the authorization token for the Strava API. If it has expired, it refreshes the token and sets it in the database.
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise} The authorization token
  */
 async function getAuthorizationToken(db) {
@@ -44,7 +44,7 @@ async function getAuthorizationToken(db) {
 /**
  * Gets data for a Strava activity based on its ID.
  * @param {number} activityId The Strava ID of the activity
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise} The activity data
  */
 async function getActivity(activityId, db) {
@@ -53,6 +53,8 @@ async function getActivity(activityId, db) {
     const url = BASE_URL(`/activities/${activityId}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activity = await response.json();
+
+    const activityStream = await getActivityStreams(activityId, db);
 
     const fmtData =  {
         id: activity?.id,
@@ -71,7 +73,8 @@ async function getActivity(activityId, db) {
         kilojoules: activity?.kilojoules,
         average_heartrate: activity?.average_heartrate,
         max_heartrate: activity?.max_heartrate,
-        calories: activity?.calories
+        calories: activity?.calories,
+        stream: activityStream
     }
 
     Object.keys(fmtData).forEach(key => {
@@ -85,7 +88,7 @@ async function getActivity(activityId, db) {
 
 /**
  * Get a list of Strava activity IDs
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise} A list of activity IDs
  */
 async function listActivityIds(db) {
@@ -98,6 +101,32 @@ async function listActivityIds(db) {
     const activities = await response.json();
 
     return activities.map(activity => activity.id);
+}
+
+/**
+ * Get data streams for a Strava activity
+ * @param {number} activityId The Strava ID of the activity
+ * @param {*} db An instance of the Firestore database
+ */
+async function getActivityStreams(activityId, db) {
+    const authToken = await getAuthorizationToken(db);
+
+    const url = BASE_URL(`/activities/${activityId}/streams/time,latlng,distance,altitude,velocity_smooth,cadence,watts,temp,moving,grade_smooth`);
+    const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
+    const activityStream = await response.json();
+
+    let formattedResponse = [];
+    const possibleStreams = activityStream.map(stream => stream.type);
+
+    activityStream[0].data.forEach((point, index) => {
+        let pointData = {};
+        possibleStreams.forEach(possibleStream => {
+           pointData[possibleStream] = activityStream.filter(stream => stream.type == possibleStream)[0].data[index];
+        });
+        formattedResponse.push(pointData);
+    })
+
+    return formattedResponse;
 }
 
 module.exports = {

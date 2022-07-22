@@ -17,7 +17,7 @@ async function authorize() {
 }
 /**
  * Test function
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise<string[]>}
  */
 async function getTestData(db) {
@@ -27,7 +27,7 @@ async function getTestData(db) {
 
 /**
  * Gets list of Strava activities from Firestore
- * @param {*} db
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise<Object[]>}
  */
 async function getActivities(db) {
@@ -37,8 +37,8 @@ async function getActivities(db) {
 
 /**
  * Posts an activity to Firestore
- * @param {*} activity 
- * @param {*} db
+ * @param {*} activity An object containing the activity data
+ * @param {*} db An instance of the Firestore database
  */
 async function postActivity(activity, db) {
     const ref = await db.collection('activities').doc(`${activity.id}`).set(activity);
@@ -46,8 +46,8 @@ async function postActivity(activity, db) {
 
 /**
  * Deletes an activity from Firestore
- * @param {*} activityId 
- * @param {*} db 
+ * @param {*} activityId The Strava ID of the activity
+ * @param {*} db An instance of the Firestore database
  */
 async function deleteActivity(activityId, db) {
     await db.collection("activities").doc(`${activityId}`).delete();
@@ -55,6 +55,7 @@ async function deleteActivity(activityId, db) {
 
 /**
  * Get authorization object from Firestore
+ * @param {*} db An instance of the Firestore database
  * @returns {Promise<admin.firestore.Firestore>}
  */
 async function getAuth(db) {
@@ -64,10 +65,10 @@ async function getAuth(db) {
 
 /**
  * Sets the authorization object in Firestore
- * @param {string} accessToken 
- * @param {number} expiresAt 
- * @param {string} refreshToken 
- * @param {*} db
+ * @param {string} accessToken The access token
+ * @param {number} expiresAt The time the token expires
+ * @param {string} refreshToken The refresh token
+ * @param {*} db An instance of the Firestore database
  */
 async function setAuth(accessToken, expiresAt, refreshToken, db) {
     await db.collection("strava-auth").doc("auth").set({
