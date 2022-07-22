@@ -32,6 +32,8 @@ const handler = async (event, context) => {
 
     await postActivity(activityData, db);
 
+    console.log(`Activity ${activityId} added to database`);
+    
     await db.terminate();
     await admin.app().delete();
 
@@ -45,6 +47,8 @@ const handler = async (event, context) => {
     const db = admin.firestore();
 
     await deleteActivity(activityId, db);
+
+    console.log(`Activity ${activityId} deleted from database`);
 
     await db.terminate();
     await admin.app().delete();
