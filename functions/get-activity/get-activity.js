@@ -1,4 +1,3 @@
-const fetch = require('node-fetch')
 import { getActivities, authorize } from '../lib/firebase-util';
 
 // get all activities from the database

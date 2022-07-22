@@ -1,5 +1,5 @@
-const { postActivity } = require("../lib/firebase-util");
-const { getActivity } = require("../lib/strava-api");
+import { postActivity, deleteActivity } from "../lib/firebase-util";
+import { getActivity } from "../lib/strava-api";
 
 const handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;

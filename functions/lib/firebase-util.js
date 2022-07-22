@@ -1,4 +1,4 @@
-const admin = require('firebase-admin')
+import admin from 'firebase-admin';
 
 /**
  * Authorizes the app with Firebase
@@ -84,6 +84,7 @@ module.exports = {
     authorize,
     getActivities,
     postActivity,
+    deleteActivity,
     getAuth,
     setAuth
 }
