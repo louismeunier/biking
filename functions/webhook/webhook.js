@@ -7,8 +7,8 @@ const handler = async (event, context) => {
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-  console.log(event.body.aspect_type);
-  const aspect_type = event.body.aspect_type;
+  console.log(JSON.parse(event.body).aspect_type);
+  const aspect_type = JSON.parse(event.body).aspect_type;
 
   try {
   if (mode && token) {
