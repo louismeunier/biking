@@ -7,7 +7,8 @@ const handler = async (event, context) => {
   let mode = event.queryStringParameters['hub.mode'];
   let token = event.queryStringParameters['hub.verify_token'];
   let challenge = event.queryStringParameters['hub.challenge'];
-  console.log(event.body)
+  console.log(event.body.aspect_type);
+  const aspect_type = event.body.aspect_type;
 
   try {
   if (mode && token) {
@@ -24,7 +25,7 @@ const handler = async (event, context) => {
         body: JSON.stringify({'error':'Verification tokens do not match'})
       }
     }
-  } else if (event.body.aspect_type == "create") {
+  } else if (aspect_type == "create") {
     console.log("New activity created");
     const activityId = event.body.object_id;
     const admin = await authorize();
