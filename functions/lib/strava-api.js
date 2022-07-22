@@ -33,7 +33,7 @@ async function getRefreshToken(refreshToken, db) {
  */
 async function getAuthorizationToken(db) {
     let auth = await getAuth(db);
-    console.log(auth);
+
     if (auth.expires_at < new Date().getTime()/1000 - 60) {
         auth = await getRefreshToken(auth.refresh_token, db);
     }
@@ -96,7 +96,7 @@ async function listActivityIds(db) {
     const url = BASE_URL("/athlete/activities");
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activities = await response.json();
-    console.log(activities);
+
     return activities.map(activity => activity.id);
 }
 

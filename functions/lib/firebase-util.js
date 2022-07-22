@@ -6,8 +6,6 @@ import admin from 'firebase-admin';
  */
 async function authorize() {
     const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
-    console.log(serviceAccount)
-
     // Initialise the admin with the credentials
     admin.initializeApp({
         credential: admin.credential.cert(serviceAccount)
@@ -61,7 +59,6 @@ async function deleteActivity(activityId, db) {
  */
 async function getAuth(db) {
     const auth = await db.collection("strava-auth").doc("auth").get();
-    console.log(auth.data())
     return auth.data();
 }
 
