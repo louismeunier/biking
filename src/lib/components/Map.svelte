@@ -1,58 +1,26 @@
 <script lang="ts">
+  // svelte
+  import { onMount } from "svelte";
+
   // leaflet
   import leaflet from "leaflet";
   import "leaflet/dist/leaflet.css";
   import markerShadow from "/marker-shadow.png";
   import markerIcon from "/marker-icon.png";
   import gpx from "leaflet-gpx";
-  // svelte
-  import { onMount } from "svelte";
-  // toast
-  import { toast } from '@zerodevx/svelte-toast';
-  import { themes } from "../utils/toast-themes";
+
   // data
   import { pointsOfInterest } from "../../data/constants";
   import erie from "../../data/eriecanalway.gpx?raw";
   import hudson from "../../data/hudsonvalleygreenway.gpx?raw";
+
+  // utils
+  import { getActivities } from "../utils/api";
   import decodePolyline from "../utils/decode-polyline";
 
   let mostRecentActivity = null;
-  async function getActivities() {
-    try {
-      toast.push("Loading activitiy data...", { theme: themes.wait });
-      const request = await fetch("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
-      const activities = await request.json();
-      toast.pop();
-      toast.push("Activities loaded!", { theme: themes.success });
-      return activities;
-    } catch (error) {
-      toast.pop()
-      toast.push("Error loading activities!", { theme: themes.error });
-      console.error(error);
-    }
-  }
 
-  interface Activity {
-    id: number,
-    name: string,
-    type: string,
-    distance: number,
-    moving_time: number,
-    elapsed_time: number,
-    start_date: string,
-    map: string,
-    start_latlng: number[],
-    end_latlng: number[],
-    average_speed: number,
-    max_speed: number,
-    average_watts?: number,
-    kilojoules?: number,
-    average_heartrate?: number,
-    max_heartrate?: number,
-    calories?: number
-  }
-
-  async function loadMap() {
+  async function renderMap() {
     const map = leaflet.map('map').setView([42.77, -73.86], 10);
     
     // creating layers
@@ -111,7 +79,7 @@
       }
     }).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>").addTo(map);
 
-    const activities:Activity[] = await getActivities();
+    const activities = await getActivities();
     const activitiesFiltered = activities.filter(a => a.type == "Ride")
     mostRecentActivity = activitiesFiltered[activitiesFiltered.length - 1].start_date;
     const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
@@ -140,11 +108,12 @@
     var layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
   }
 
-  onMount(loadMap)
+  onMount(renderMap);
 </script>
 
 <div id="map"></div>
 <p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em>{:else} loading... {/if}</p>
+
 <style>
   p {
     position: absolute;
