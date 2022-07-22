@@ -44,7 +44,7 @@ const handler = async (event, context) => {
         statusCode: 200,
         body: JSON.stringify({"message": "Activity synced"})
       }
-    } else if (event.body.aspect_type == "delete") {
+    } else if (aspect_type == "delete") {
       console.log("Activity deleted");
 
       const activityId = event.body.object_id;
@@ -62,12 +62,31 @@ const handler = async (event, context) => {
         statusCode: 200,
         body: JSON.stringify({"message": "Activity deleted"})
       }
+    } else if (aspect_type == "update") {
+      console.log("Activity updated");
+      const activityId = event.body.object_id;
+      // const admin = await authorize();
+      // const db = admin.firestore();
+
+      // const activityData = await getActivity(activityId, db);
+
+      // await postActivity(activityData, db);
+
+      // console.log(`Activity ${activityId} updated in database`);
+
+      // await db.terminate();
+      // await admin.app().delete();
+
+      return {
+        statusCode: 200,
+        body: JSON.stringify({"message": "Activity updated"})
+      }
     } else {
-    console.log("Something went wrong");
-    return {
-      statusCode: 400,
-      body: JSON.stringify({'error':'Missing mode or token'})
-    }
+      console.log("Something went wrong");
+      return {
+        statusCode: 400,
+        body: JSON.stringify({'error':'Missing mode or token'})
+      }
     } 
   } catch (error) {
       console.log(error);
