@@ -8,7 +8,7 @@ const handler = async function () {
     const data = await getActivities(db);
 
     await db.terminate();
-    await admin.app().delete();
+    // await admin.app().delete();
     return {
       headers: {
         "Access-Control-Allow-Origin": "*"
