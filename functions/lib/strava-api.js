@@ -113,10 +113,10 @@ async function listActivityIds(db, limit) {
 async function getActivityStreams(activityId, db) {
     const authToken = await getAuthorizationToken(db);
 
-    const url = BASE_URL(`/activities/${activityId}/streams/time,latlng,distance,altitude,velocity_smooth,cadence,watts,temp,moving,grade_smooth`);
+    const url = BASE_URL(`/activities/${activityId}/streams?keys=time,latlng,distance,altitude,velocity_smooth,cadence,watts,temp,moving,grade_smooth`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activityStream = await response.json();
-
+console.log(activityStream);
     const formattedResponse = {};
     activityStream.forEach(stream => {
         if (stream.type === "latlng") {
