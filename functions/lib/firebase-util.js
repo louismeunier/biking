@@ -32,8 +32,14 @@ async function getTestData(db) {
  * @returns {Promise<Object[]>}
  */
 async function getActivities(db) {
-    const data = await db.collection('activities').get();
-    return data.docs.map(doc => doc.data())
+    const data = await db.collection('activities').where('type', '==', 'Ride').get();
+    return data.docs.map(doc => {
+        const docdata = doc.data();
+        if (docdata.stream) {
+            delete docdata.stream;
+        }
+        return docdata;
+    })
 }
 
 /**
