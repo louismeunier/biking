@@ -23,7 +23,7 @@ interface Activity {
 
 export async function getActivities(): Promise<Activity[]> {
     try {
-      toast.push("Loading activitiy data...", { theme: themes.wait });
+      toast.push("Loading activitiy data...", { theme: themes.wait, dismissable: false, duration: 10000 });
       const request = await fetch("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
       const activities = await request.json();
       toast.pop();
