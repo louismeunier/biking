@@ -73,8 +73,7 @@ async function getActivity(activityId, db) {
         kilojoules: activity?.kilojoules,
         average_heartrate: activity?.average_heartrate,
         max_heartrate: activity?.max_heartrate,
-        calories: activity?.calories,
-        // stream: activityStream
+        calories: activity?.calories
     }
 
     Object.keys(fmtData).forEach(key => {
