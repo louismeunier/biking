@@ -40,7 +40,7 @@ const handler = async (event, context) => {
       console.log(`Activity ${activityId} added to database`);
 
       await db.terminate();
-      await admin.app().delete();
+      // await admin.app().delete();
 
       return {
         statusCode: 200,
@@ -58,7 +58,7 @@ const handler = async (event, context) => {
       console.log(`Activity ${activityId} deleted from database`);
 
       await db.terminate();
-      await admin.app().delete();
+      // await admin.app().delete();
 
       return {
         statusCode: 200,

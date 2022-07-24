@@ -54,7 +54,7 @@ async function getActivity(activityId, db) {
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activity = await response.json();
 
-    const activityStream = await getActivityStreams(activityId, db);
+    // const activityStream = await getActivityStreams(activityId, db);
 
     const fmtData =  {
         id: activity?.id,
@@ -74,7 +74,7 @@ async function getActivity(activityId, db) {
         average_heartrate: activity?.average_heartrate,
         max_heartrate: activity?.max_heartrate,
         calories: activity?.calories,
-        stream: activityStream
+        // stream: activityStream
     }
 
     Object.keys(fmtData).forEach(key => {

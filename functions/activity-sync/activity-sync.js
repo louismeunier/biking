@@ -17,7 +17,7 @@ const handler = async (event) => {
 
     if (missingIds.length == 0 && !force) {
       await db.terminate();
-      await admin.app().delete();
+      // await admin.app().delete();
       
       return {
         headers: {
@@ -37,7 +37,7 @@ const handler = async (event) => {
       }));
 
       await db.terminate();
-      await admin.app().delete();
+      // await admin.app().delete();
 
       return {
         headers: {

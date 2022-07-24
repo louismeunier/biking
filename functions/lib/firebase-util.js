@@ -33,13 +33,7 @@ async function getTestData(db) {
  */
 async function getActivities(db) {
     const data = await db.collection('activities').where('type', '==', 'Ride').get();
-    return data.docs.map(doc => {
-        const docdata = doc.data();
-        if (docdata.stream) {
-            delete docdata.stream;
-        }
-        return docdata;
-    })
+    return data.docs.map(doc => doc.data())
 }
 
 /**
