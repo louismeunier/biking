@@ -119,7 +119,11 @@ async function getActivityStreams(activityId, db) {
 
     const formattedResponse = {};
     activityStream.forEach(stream => {
-        formattedResponse[stream.type] = stream.data;
+        if (stream.type === "latlng") {
+            formattedResponse.latlng = stream.data.map(point => { return {lat: point[0], lng: point[1]} });
+        } else {
+            formattedResponse[stream.type] = stream.data;
+        }
     });
     
     return formattedResponse;
