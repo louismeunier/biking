@@ -8,13 +8,13 @@ async function authorize() {
     const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
     // Initialise the admin with the credentials
     // check if app has already been initialized
-    if (admin.apps.length > 0 ) {
-        return admin;
-    } else {
+    // if (admin.apps.length > 0 ) {
+        // return admin;
+    // } else {
         return admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
         })
-    }
+    // }
 }
 /**
  * Test function
