@@ -9,16 +9,12 @@ async function authorize() {
     // Initialise the admin with the credentials
     // check if app has already been initialized
     if (admin.apps.length > 0 ) {
-        admin.app().delete();
+        return admin;
+    } else {
+        return admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        })
     }
-    
-    admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    })
-
-    // Set up an instance of the DB
-    // const db = admin.firestore()
-    return admin;
 }
 /**
  * Test function
