@@ -18,6 +18,7 @@
   import { getActivities } from "../utils/api";
   import decodePolyline from "../utils/decode-polyline";
 import Footer from "./Footer.svelte";
+import { metersToMiles, secondsToHours } from "../utils/conversions";
 
   let mostRecentActivity = null;
 
@@ -91,7 +92,7 @@ import Footer from "./Footer.svelte";
         opacity: 0.3,
         smoothFactor: 1,
         noClip: false,
-      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${Math.floor(activity.distance/1.609)/1000} miles<br>${Math.floor(activity.moving_time/36)/100} hours`);
+      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${metersToMiles(activity.distance)} miles<br>${secondsToHours(activity.moving_time)} hours`);
     })).addTo(map);
 
     const baseMaps = {
