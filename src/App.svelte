@@ -1,14 +1,10 @@
 <script lang="ts">
     import Map from "./lib/components/Map.svelte";
-    import Footer from "./lib/components/Footer.svelte";
     import { SvelteToast } from "@zerodevx/svelte-toast";
 </script>
 
 <SvelteToast/>
-<div id="primary">
-    <Map />
-    <Footer/>   
-</div>
+<Map />
 <div id="analysis">
 </div>
 
@@ -17,7 +13,7 @@
         font-family: "Source Code Pro", monospace;
     }
     
-    #primary {
+    :global(#primary) {
         display: flex;
         flex-direction: column;
         height: 100vh;

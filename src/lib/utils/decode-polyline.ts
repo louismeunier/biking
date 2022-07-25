@@ -1,11 +1,11 @@
 // https://github.com/jhermsmeier/node-google-polyline
 var PRECISION = 1e5
 
-function sign(value) {
+function sign(value:number):number {
   return value & 1 ? ~( value >>> 1 ) : ( value >>> 1 )
 }
 
-function integers(value, callback) {
+function integers(value:string, callback:Function):number {
   var values = 0
   var x = 0
   var y = 0
@@ -36,12 +36,17 @@ function integers(value, callback) {
   return values
 }
 
-export default function decodePolyline( value ) {
+/**
+ * Converts an encoded polyline string to an array of points.
+ * @param {string} value The encoded polyline string
+ * @returns {Array[Array[number]]} An array of coordinates
+ */
+export default function decodePolyline( value:string ):Array<Array<number>> {
   var points = []
   var lat = 0
   var lon = 0
 
-  var values = integers( value, function( x, y ) {
+  var values = integers( value, function( x:number, y:number ) {
     lat += x
     lon += y
     points.push([ lat / PRECISION, lon / PRECISION ])

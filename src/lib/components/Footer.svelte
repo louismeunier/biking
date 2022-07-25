@@ -2,6 +2,8 @@
     import { toast } from "@zerodevx/svelte-toast";
     import { themes } from "../utils/toast-themes";
 
+    export let mostRecentActivity = null;
+
     function handleClick() {
         const pw = window.prompt("Password")
         // very secure, I know. Not really necessary right now, but with the backend setup, it would work
@@ -25,19 +27,27 @@
 </script>
 
 <div id="footer">
-    <h1>Bike Trail Visualizer</h1>
-    <img src="/bike.svg" alt="Bike Logo" height="55px"/>
-    <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
+    <div id="main-footer">
+        <h1>Bike Trail Visualizer</h1>
+        <img src="/bike.svg" alt="Bike Logo" height="55px"/>
+        <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
+    </div>
+    <div id="lower-footer">
+        <p>
+            {#if mostRecentActivity}
+                Last updated: {mostRecentActivity}
+            {:else}
+                Loading...
+            {/if}
+        </p>
+        <button title="Synchronize database">
+            <img src="/sync.png" alt="Synchronize DB with strava" height="20px" on:click="{handleClick}"/>
+        </button>
+    </div>
 </div>
-<button title="Synchronize database">
-    <img src="/sync.png" alt="Synchronize DB with strava" height="20px" on:click="{handleClick}"/>
-</button>
 
 <style>
     button {
-        position: absolute;
-        bottom: 0;
-        right: 0;
         width: fit-content;
         display: grid;
         place-items: center;
@@ -57,6 +67,19 @@
         display: flex;
         flex-direction: column;
         text-align: center;
-        margin-bottom: 50px;
+    }
+
+    #main-footer {
+        display: flex;
+        flex-grow: 1;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    #lower-footer {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
     }
 </style>

@@ -17,6 +17,7 @@
   // utils
   import { getActivities } from "../utils/api";
   import decodePolyline from "../utils/decode-polyline";
+import Footer from "./Footer.svelte";
 
   let mostRecentActivity = null;
 
@@ -111,16 +112,13 @@
   onMount(renderMap);
 </script>
 
-<div id="map"></div>
-<p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em>{:else} loading... {/if}</p>
+<div id="primary">
+  <div id="map"></div>
+  <Footer mostRecentActivity={mostRecentActivity} />
+</div>
+<!-- <p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em>{:else} loading... {/if}</p> -->
 
 <style>
-  p {
-    position: absolute;
-    bottom: 0;
-    left: 0;
-    margin-bottom: 0;
-  }
   :global(.leaflet-popup-content) {
     display: flex;
     flex-direction: column;
