@@ -2,5 +2,5 @@
   functions = "functions"
   publish = "dist"
 [[redirects]]
-from="/.netlify/functions/*"
-to="/api/*"
+from = "/.netlify/functions/"
+to = "/api/"
