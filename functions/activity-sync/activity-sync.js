@@ -16,8 +16,8 @@ const handler = async (event) => {
     const missingIds = activityIds.filter(id => !dbActivitiesIds.includes(id));
 
     if (missingIds.length == 0 && !force) {
-      await db.terminate();
-      await admin.app().delete();
+      // await db.terminate();
+      // await admin.app().delete();
       
       return {
         headers: {
@@ -36,8 +36,8 @@ const handler = async (event) => {
         await postActivity(activity, db);
       }));
 
-      await db.terminate();
-      await admin.app().delete();
+      // await db.terminate();
+      // await admin.app().delete();
 
       return {
         headers: {

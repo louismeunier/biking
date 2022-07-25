@@ -7,7 +7,7 @@ const handler = async function () {
     const db = admin.firestore();
     const data = await getActivities(db);
 
-    await db.terminate();
+    // await db.terminate();
     // await admin.app().delete();
     return {
       headers: {

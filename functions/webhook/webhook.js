@@ -39,7 +39,7 @@ const handler = async (event, context) => {
 
       console.log(`Activity ${activityId} added to database`);
 
-      await db.terminate();
+      // await db.terminate();
       // await admin.app().delete();
 
       return {
@@ -57,7 +57,7 @@ const handler = async (event, context) => {
 
       console.log(`Activity ${activityId} deleted from database`);
 
-      await db.terminate();
+      // await db.terminate();
       // await admin.app().delete();
 
       return {
