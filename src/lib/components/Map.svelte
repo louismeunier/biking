@@ -1,6 +1,7 @@
 <script lang="ts">
   // svelte
   import { onMount } from "svelte";
+  import Footer from "./Footer.svelte";
 
   // leaflet
   import leaflet from "leaflet";
@@ -17,8 +18,7 @@
   // utils
   import { getActivities } from "../utils/api";
   import decodePolyline from "../utils/decode-polyline";
-import Footer from "./Footer.svelte";
-import { metersToMiles, secondsToHours } from "../utils/conversions";
+  import convert from "../utils/conversions";
 
   let mostRecentActivity = null;
 
@@ -92,7 +92,7 @@ import { metersToMiles, secondsToHours } from "../utils/conversions";
         opacity: 0.3,
         smoothFactor: 1,
         noClip: false,
-      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${metersToMiles(activity.distance)} miles<br>${secondsToHours(activity.moving_time)} hours`);
+      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`);
     })).addTo(map);
 
     const baseMaps = {

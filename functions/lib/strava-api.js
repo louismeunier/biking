@@ -107,15 +107,16 @@ async function listActivityIds(db, limit) {
 /**
  * Get data streams for a Strava activity
  * @param {number} activityId The Strava ID of the activity
+ * @param {string[]} streams The list of streams to get
  * @param {*} db An instance of the Firestore database
  */
-async function getActivityStreams(activityId, db) {
+async function getActivityStreams(activityId, streams, db) {
     const authToken = await getAuthorizationToken(db);
 
-    const url = BASE_URL(`/activities/${activityId}/streams?keys=time,latlng,distance,altitude,velocity_smooth,cadence,watts,temp,moving,grade_smooth`);
+    const url = BASE_URL(`/activities/${activityId}/streams?keys=${streams.join(",")}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activityStream = await response.json();
-console.log(activityStream);
+
     const formattedResponse = {};
     activityStream.forEach(stream => {
         if (stream.type === "latlng") {
@@ -130,5 +131,6 @@ console.log(activityStream);
 
 module.exports = {
     getActivity,
-    listActivityIds
+    listActivityIds,
+    getActivityStreams
 }
