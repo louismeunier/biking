@@ -5,10 +5,14 @@ import admin from 'firebase-admin';
  * @returns {Promise<admin>}
  */
 async function authorize() {
-    const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
-    return admin.initializeApp({
-        credential: admin.credential.cert(serviceAccount)
-    })
+    if (!admin.apps.length) {
+        const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
+        return admin.initializeApp({
+            credential: admin.credential.cert(serviceAccount)
+        })
+    } else {
+        return admin.apps[0];
+    }
 }
 /**
  * Test function
