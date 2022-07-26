@@ -14,6 +14,7 @@
   import { pointsOfInterest } from "../../data/constants";
   import erie from "../../data/eriecanalway.gpx?raw";
   import hudson from "../../data/hudsonvalleygreenway.gpx?raw";
+  import helderberg from "../../data/albanyhelderbergrailtrail.gpx?raw";
 
   // utils
   import { getActivities } from "../utils/api";
@@ -81,6 +82,22 @@
       }
     }).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>").addTo(map);
 
+    const gpxHelderberg = new leaflet.GPX(helderberg, {
+      async: true,
+      marker_options: {
+        startIconUrl: null,
+        endIconUrl: null,
+        shadowUrl: null
+      },
+      polyline_options: {
+        color: 'orange',
+        weight: 4,
+        opacity: 0.5,
+        smoothFactor: 1,
+        noClip: false,
+      }
+    }).bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg Trail</strong>").addTo(map);
+
     const baseMaps = {
       "OpenStreetMap": osmLayer,
       "Satellite": satteliteLayer
@@ -89,7 +106,8 @@
     const overlayMaps = {
         "Points of Interest": poisLayer,
         "Erie Canalway Trail": gpxErie,
-        "Hudson Valley Greenway Trail": gpxHudson
+        "Hudson Valley Greenway Trail": gpxHudson,
+        "Albany Helderberg Rail Trail": gpxHelderberg
     };
 
     layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
