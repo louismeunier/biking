@@ -1,7 +1,7 @@
 <script lang="ts">
+  export let activities = null;
   // svelte
   import { onMount } from "svelte";
-  import Footer from "./Footer.svelte";
 
   // leaflet
   import leaflet from "leaflet";
@@ -20,11 +20,11 @@
   import decodePolyline from "../utils/decode-polyline";
   import convert from "../utils/conversions";
 
-  let mostRecentActivity = null;
+  let layerControl;
+  let map;
 
   async function renderMap() {
-    const map = leaflet.map('map').setView([42.77, -73.86], 10);
-    
+    map = leaflet.map('map').setView([42.77, -73.86], 10);
     // creating layers
     const osmLayer = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
       attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
@@ -81,20 +81,6 @@
       }
     }).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>").addTo(map);
 
-    const activities = await getActivities();
-    const activitiesFiltered = activities.filter(a => a.type == "Ride")
-    mostRecentActivity = activitiesFiltered[activitiesFiltered.length - 1].start_date;
-    const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
-      const testltln = decodePolyline(activity.map);
-      return leaflet.polyline(testltln, {
-        color: 'red',
-        weight: 7,
-        opacity: 0.3,
-        smoothFactor: 1,
-        noClip: false,
-      }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`);
-    })).addTo(map);
-
     const baseMaps = {
       "OpenStreetMap": osmLayer,
       "Satellite": satteliteLayer
@@ -103,21 +89,36 @@
     const overlayMaps = {
         "Points of Interest": poisLayer,
         "Erie Canalway Trail": gpxErie,
-        "Hudson Valley Greenway Trail": gpxHudson,
-        "Activities": activitiesLayer
+        "Hudson Valley Greenway Trail": gpxHudson
     };
 
-    var layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
+    layerControl = leaflet.control.layers(baseMaps, overlayMaps).addTo(map);
   }
 
+  // when activities loads, render the new layer
+  $: {
+    if (activities) {
+      const activitiesFiltered = activities.filter(a => a.type == "Ride")
+      const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
+        const testltln = decodePolyline(activity.map);
+        return leaflet.polyline(testltln, {
+          color: 'red',
+          weight: 7,
+          opacity: 0.3,
+          smoothFactor: 1,
+          noClip: false,
+        }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`);
+      })).addTo(map);
+
+      layerControl.addOverlay(leaflet.layerGroup([activitiesLayer]), "Activities");
+    }
+  }
+
+  // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
   onMount(renderMap);
 </script>
 
-<div id="primary">
-  <div id="map"></div>
-  <Footer mostRecentActivity={mostRecentActivity} />
-</div>
-<!-- <p>{#if mostRecentActivity}last updated: <em>{mostRecentActivity}</em>{:else} loading... {/if}</p> -->
+<div id="map"></div>
 
 <style>
   :global(.leaflet-popup-content) {
