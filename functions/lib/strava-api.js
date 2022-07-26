@@ -116,6 +116,7 @@ async function getActivityStreams(activityId, streams, db) {
     const url = BASE_URL(`/activities/${activityId}/streams?keys=${streams.join(",")}`);
     const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
     const activityStream = await response.json();
+    console.log(activityStream);
 
     const formattedResponse = {};
     activityStream.forEach(stream => {
