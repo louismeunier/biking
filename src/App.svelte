@@ -17,7 +17,7 @@
     <Map activities={activities} />
     <Title />
 </div>
-<Analysis/>
+<Analysis activities={activities}/>
 </main>
 
 <style>
