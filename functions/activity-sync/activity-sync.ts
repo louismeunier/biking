@@ -1,10 +1,12 @@
+import { Handler } from '@netlify/functions'
 import { postActivity, authorize, getActivities } from "../lib/firebase-util"
 import { listActivityIds, getActivity } from "../lib/strava-api"
 
-const handler = async (event) => {
+export const handler: Handler = async (event) => {
   try {
-    const force = event.queryStringParameters.force || false;
-    const num = event.queryStringParameters.num;
+    const queryStringParameters = event.queryStringParameters
+    const force = queryStringParameters?.force || false;
+    const num = queryStringParameters?.num;
     const admin = await authorize();
     const db = admin.firestore();
 
@@ -54,5 +56,3 @@ const handler = async (event) => {
     }, statusCode: 500, body: error.toString() }
   }
 }
-
-module.exports = { handler }

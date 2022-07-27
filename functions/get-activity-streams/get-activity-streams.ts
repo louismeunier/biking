@@ -1,12 +1,25 @@
+import { Handler } from '@netlify/functions'
 import { authorize } from '../lib/firebase-util';
 import { getActivityStreams } from '../lib/strava-api';
 
 // get all activities from the database
-const handler = async function (event, context) {
+export const handler: Handler = async function (event, context) {
   try {
-    const streamKeys = event.queryStringParameters.streams;
+    const queryStringParameters = event.queryStringParameters;
+    const streamKeys = queryStringParameters?.streams;
+    const activityId = queryStringParameters?.id;
+
+    if (!streamKeys || !activityId) {
+      return {
+        headers: {
+          "Access-Control-Allow-Origin": "*"
+        },
+        statusCode: 400,
+        body: JSON.stringify({"message": "Missing required parameters"})
+      }
+    }
+    
     const streamKeysArray = streamKeys.split(',');
-    const activityId = event.queryStringParameters.id;
 
     const admin = await authorize();
     const db = admin.firestore();
@@ -27,5 +40,3 @@ const handler = async function (event, context) {
     }, statusCode: 500, body: error.toString() }
   }
 }
-
-module.exports = { handler }

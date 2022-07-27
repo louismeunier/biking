@@ -12,7 +12,7 @@ const CLIENT_SECRET = process.env.STRAVA_CLIENT_SECRET;
  * @param {*} db An instance of the Firestore database
  * @returns {Promise} The refresh token
  */
-async function getRefreshToken(refreshToken, db) {
+export async function getRefreshToken(refreshToken, db) {
     const url = BASE_URL(`/oauth/token?client_id=${CLIENT_ID}&client_secret=${CLIENT_SECRET}&grant_type=refresh_token&refresh_token=${refreshToken}`);
     const refresh = await fetch(url, { method: "POST" });
     const refreshData = await refresh.json();
@@ -31,7 +31,7 @@ async function getRefreshToken(refreshToken, db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise} The authorization token
  */
-async function getAuthorizationToken(db) {
+export async function getAuthorizationToken(db) {
     let auth = await getAuth(db);
 
     if (auth.expires_at < new Date().getTime()/1000 - 60) {
@@ -47,7 +47,7 @@ async function getAuthorizationToken(db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise} The activity data
  */
-async function getActivity(activityId, db) {
+export async function getActivity(activityId, db) {
     const authToken = await getAuthorizationToken(db);
 
     const url = BASE_URL(`/activities/${activityId}`);
@@ -90,7 +90,7 @@ async function getActivity(activityId, db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise} A list of activity IDs
  */
-async function listActivityIds(db, limit) {
+export async function listActivityIds(db, limit) {
     const authToken = await getAuthorizationToken(db);
     // const startDate = new Date().getTime();
     // const endDate = new Date(new Date().getTime() - (30 * 24 * 60 * 60 * 1000));
@@ -110,7 +110,7 @@ async function listActivityIds(db, limit) {
  * @param {string[]} streams The list of streams to get
  * @param {*} db An instance of the Firestore database
  */
-async function getActivityStreams(activityId, streams, db) {
+export async function getActivityStreams(activityId, streams, db) {
     const authToken = await getAuthorizationToken(db);
 
     const url = BASE_URL(`/activities/${activityId}/streams?keys=${streams.join(",")}`);
@@ -118,7 +118,7 @@ async function getActivityStreams(activityId, streams, db) {
     const activityStream = await response.json();
     console.log(activityStream);
 
-    const formattedResponse = {};
+    const formattedResponse: { [key: string]: any[]; }  = {};
     activityStream.forEach(stream => {
         if (stream.type === "latlng") {
             formattedResponse.latlng = stream.data.map(point => { return {lat: point[0], lng: point[1]} });
@@ -128,10 +128,4 @@ async function getActivityStreams(activityId, streams, db) {
     });
     
     return formattedResponse;
-}
-
-module.exports = {
-    getActivity,
-    listActivityIds,
-    getActivityStreams
 }

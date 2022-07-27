@@ -1,7 +1,8 @@
+import { Handler } from '@netlify/functions'
 import { getActivities, authorize } from '../lib/firebase-util';
 
 // get all activities from the database
-const handler = async function () {
+export const handler: Handler = async function () {
   try {
     const admin = await authorize();
     const db = admin.firestore();
@@ -23,5 +24,3 @@ const handler = async function () {
     }, statusCode: 500, body: error.toString() }
   }
 }
-
-module.exports = { handler }

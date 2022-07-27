@@ -4,8 +4,9 @@ import admin from 'firebase-admin';
  * Authorizes the app with Firebase
  * @returns {Promise<admin>}
  */
-async function authorize() {
-    if (!admin.apps.length) {
+export async function authorize() {
+    if (!admin.apps[0]) {
+        // @ts-ignore
         const serviceAccount = JSON.parse(process.env.SERVICE_ACCOUNT);
         return admin.initializeApp({
             credential: admin.credential.cert(serviceAccount)
@@ -19,7 +20,7 @@ async function authorize() {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise<string[]>}
  */
-async function getTestData(db) {
+export async function getTestData(db) {
     const data = await db.collection('activities').get()
     return data.docs.map(doc => doc.data())
 }
@@ -29,7 +30,7 @@ async function getTestData(db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise<Object[]>}
  */
-async function getActivities(db) {
+export async function getActivities(db) {
     const data = await db.collection('activities').where('type', '==', 'Ride').get();
     return data.docs.map(doc => doc.data())
 }
@@ -39,7 +40,7 @@ async function getActivities(db) {
  * @param {*} activity An object containing the activity data
  * @param {*} db An instance of the Firestore database
  */
-async function postActivity(activity, db) {
+export async function postActivity(activity, db) {
     const ref = await db.collection('activities').doc(`${activity.id}`).set(activity);
 }
 
@@ -57,7 +58,7 @@ async function deleteActivity(activityId, db) {
  * @param {*} db An instance of the Firestore database
  * @returns {Promise<admin.firestore.Firestore>}
  */
-async function getAuth(db) {
+export async function getAuth(db) {
     const auth = await db.collection("strava-auth").doc("auth").get();
     return auth.data();
 }
@@ -69,19 +70,10 @@ async function getAuth(db) {
  * @param {string} refreshToken The refresh token
  * @param {*} db An instance of the Firestore database
  */
-async function setAuth(accessToken, expiresAt, refreshToken, db) {
+export async function setAuth(accessToken, expiresAt, refreshToken, db) {
     await db.collection("strava-auth").doc("auth").set({
         access_token: accessToken,
         expires_at: expiresAt,
         refresh_token: refreshToken
     })
-}
-
-module.exports = {
-    authorize,
-    getActivities,
-    postActivity,
-    deleteActivity,
-    getAuth,
-    setAuth
 }
