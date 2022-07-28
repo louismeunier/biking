@@ -11,37 +11,28 @@
     (async () => {  activities = await getActivities() })();
 </script>
 
-<main>
 <SvelteToast/>
-<div id="top">
-    <Map activities={activities} />
-    <Title />
-</div>
-<Analysis activities={activities}/>
+<main>  
+    <div class="map-wrap">
+        <Map activities={activities} />
+    </div>
+    <div class="sidepanel">
+        <Title />
+        <Analysis activities={activities}/>
+    </div>
 </main>
 
 <style>
     :root {
         font-family: "Source Code Pro", monospace;
+        scroll-behavior: smooth;
     }
     
-    main {
-        display: flex;
-        flex-direction: column;
-    }
-    
-    #top {
-        display: flex;
-        flex-direction: column;
-        height: 100vh;
-    }
-
-    :global(#app) {
-        display: flex;
-        flex-direction: column;
-        margin: 0;
-        padding: 0;
-        width: 100vw;
+    .sidepanel {
+        overflow-y: auto;
+        height: fit-content;
+        margin-left: 50%;
+        right: 0;
     }
 
     :global(body) {
@@ -49,7 +40,31 @@
         padding: 0;
     }
 
+    .map-wrap {
+        height: 100vh;
+        overflow: hidden;
+        position: fixed;
+        left: 0;
+        top: 0;
+        bottom: 0;
+        width: 50%;
+    }
+
     :global(#map) {
-        height: 85%;
+        height: 100%;
+        overflow: hidden;
+    }
+
+    @media only screen and (max-width: 600px) {
+        .map-wrap {
+            width: 100%;
+            z-index: 999;
+            height: 50%;
+        }
+        .sidepanel {
+            margin-left: 0;
+            margin-top: 50%;
+            width: 100%;
+        }
     }
 </style>

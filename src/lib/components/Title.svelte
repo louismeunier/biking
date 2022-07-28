@@ -8,17 +8,15 @@
 </div>
 
 <style>
-    #footer {
-        display: flex;
-        flex-direction: column;
-        text-align: center;
-    }
 
     #footer {
         display: flex;
-        flex-grow: 1;
         flex-direction: column;
         align-items: center;
+        justify-content: center;
+        gap: 2em;
+        padding-inline: 2em;
+        height: 100vh;
     }
 
     .down {
