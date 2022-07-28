@@ -49,7 +49,7 @@ export async function postActivity(activity, db) {
  * @param {*} activityId The Strava ID of the activity
  * @param {*} db An instance of the Firestore database
  */
-async function deleteActivity(activityId, db) {
+export async function deleteActivity(activityId, db) {
     await db.collection("activities").doc(`${activityId}`).delete();
 }
 

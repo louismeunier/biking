@@ -1,7 +1,8 @@
+import { Handler } from "leaflet";
 import { postActivity, deleteActivity, authorize } from "../lib/firebase-util";
 import { getActivity } from "../lib/strava-api";
 
-const handler = async (event, context) => {
+export const handler:Handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
   let mode = event.queryStringParameters['hub.mode'];
@@ -86,5 +87,3 @@ const handler = async (event, context) => {
       }
     }
 }
-
-module.exports = { handler }
