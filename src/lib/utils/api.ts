@@ -19,7 +19,10 @@ export interface Activity {
     average_heartrate?: number,
     max_heartrate?: number,
     calories?: number,
-    show: boolean
+    meta: {
+      show: boolean,
+      highlight: boolean,
+    }
 }
 
 export async function getActivities(): Promise<Activity[]> {
@@ -29,7 +32,7 @@ export async function getActivities(): Promise<Activity[]> {
     const activities = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });
-    return activities.map(a => { a.show = true; return a;});
+    return activities.map(a => { a.meta = { show: true, highlight: false } ; return a;});
   } catch (error) {
     toast.pop()
     toast.push("Error loading activities!", { theme: themes.error });

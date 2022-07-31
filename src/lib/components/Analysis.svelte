@@ -68,7 +68,7 @@
                         checked={true}
                         on:change={e => activityData.update(acs => acs.map(activity => {
                                 // @ts-ignore
-                                activity.show = e.target.checked;
+                                activity.meta.show = e.target.checked;
                                 return activity
                             }))
                         }
@@ -79,7 +79,31 @@
         <tbody>
             {#if activities} 
                 {#each activities as a}
-                    <tr>
+                    <!-- svelte-ignore a11y-mouse-events-have-key-events -->
+                    <tr
+                    on:focus="{()=>{}}"
+                        on:mouseover={() => {
+                            // alert("test")
+                            activityData.update(as => {
+                                    return as.map(activity => {
+                                        if (a.id === activity.id) {
+                                            activity.meta.highlight = true;
+                                        }
+                                        return activity
+                                    });
+                                 })
+                        }}
+                        on:mouseout={() => {
+                            activityData.update(as => {
+                                    return as.map(activity => {
+                                        if (a.id === activity.id) {
+                                            activity.meta.highlight = false;
+                                        }
+                                        return activity
+                                    });
+                                 })
+                        }}
+                    >
                         <td>{new Date(a.start_date).toLocaleDateString()}</td>
                         <td>{convert.metersToMiles(a.distance)}</td>
                         <td>{convert.secondsToHours(a.moving_time)}</td>
@@ -87,11 +111,11 @@
                         <td class="toggle">
                             <input 
                                 type="checkbox" 
-                                checked={a.show}
+                                checked={a.meta.show}
                                 on:change={() => activityData.update(as => {
                                     return as.map(activity => {
                                         if (a.id === activity.id) {
-                                            activity.show = !activity.show;
+                                            activity.meta.show = !activity.meta.show;
                                         }
                                         return activity
                                     });
@@ -135,12 +159,17 @@
 
     tr {
         border: 1px solid black;
+        transition: 0.3s ease-in-out;
+    }
+
+    tbody tr:hover {
+        background-color: rgb(255, 255, 136);
     }
 
     .toggle {
         width: min-content;
     }
-    
+
     thead {
         font-weight: 900;
         background-color: lightblue;

@@ -118,17 +118,35 @@
     // rewrite all this to make each activity a layer
     if (activities.length > 0) {
       activities.forEach(activity => {
-        if (activity.show && !activitiesLayer[activity.id]) {
+        // alert(activity.meta.highlight)
+        if (activitiesLayer[activity.id]) {
+          map.removeLayer(activitiesLayer[activity.id]);
+          delete activitiesLayer[activity.id];
           const testltln = decodePolyline(activity.map);
           activitiesLayer[activity.id] = leaflet.polyline(testltln, {
-            color: 'red',
+            color: activity.meta.highlight ? 'yellow' : 'red',
+            weight: activity.meta.highlight ? 12 : 7,
+            opacity: activity.meta.highlight ? 1 : 0.3,
+            smoothFactor: 1,
+            noClip: false,
+            zIndex: activity.meta.highlight ? 100 : 1
+          }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`)
+            .addTo(map);
+            if (activity.meta.highlight) {
+              activitiesLayer[activity.id].openPopup();
+            }
+        }
+        if (activity.meta.show && !activitiesLayer[activity.id]) {
+          const testltln = decodePolyline(activity.map);
+          activitiesLayer[activity.id] = leaflet.polyline(testltln, {
+            color: activity.meta.highlight ? 'yellow' : 'red',
             weight: 7,
             opacity: 0.3,
             smoothFactor: 1,
             noClip: false,
           }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`)
             .addTo(map);
-        } else if (!activity.show && activitiesLayer[activity.id]) {
+        } else if (!activity.meta.show && activitiesLayer[activity.id]) {
           map.removeLayer(activitiesLayer[activity.id]);
           delete activitiesLayer[activity.id];
         }
