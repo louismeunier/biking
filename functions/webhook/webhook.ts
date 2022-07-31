@@ -1,14 +1,17 @@
-import { Handler } from "leaflet";
+import { Handler } from "@netlify/functions";
 import { postActivity, deleteActivity, authorize } from "../lib/firebase-util";
 import { getActivity } from "../lib/strava-api";
 
 export const handler:Handler = async (event, context) => {
   const VERIFY_TOKEN = process.env.VERIFY_TOKEN;
 
+  // @ts-ignore
   let mode = event.queryStringParameters['hub.mode'];
+  // @ts-ignore
   let token = event.queryStringParameters['hub.verify_token'];
+  // @ts-ignore
   let challenge = event.queryStringParameters['hub.challenge'];
-  
+  // @ts-ignore
   const body = JSON.parse(event.body);
   const aspect_type = body.aspect_type;
 
@@ -67,7 +70,7 @@ export const handler:Handler = async (event, context) => {
       }
     } else if (aspect_type == "update") {
       console.log("Activity updated");
-      const activityId = event.body.object_id;
+      // const activityId = event.body.object_id;
       return {
         statusCode: 200,
         body: JSON.stringify({"message": "Activity updated"})
