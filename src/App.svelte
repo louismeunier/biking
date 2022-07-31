@@ -6,19 +6,19 @@
     import { SvelteToast } from "@zerodevx/svelte-toast";
     // utils
     import { getActivities } from "./lib/utils/api";
+    import { activityData } from "./lib/utils/store";
 
-    let activities;
-    (async () => {  activities = await getActivities() })();
+    (async () => { const activities = await getActivities(); activityData.set(activities) })();
 </script>
 
 <SvelteToast/>
 <main>  
     <div class="map-wrap">
-        <Map activities={activities} />
+        <Map />
     </div>
     <div class="sidepanel">
         <Title />
-        <Analysis activities={activities}/>
+        <Analysis />
     </div>
 </main>
 

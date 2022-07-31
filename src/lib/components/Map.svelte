@@ -1,5 +1,4 @@
 <script lang="ts">
-  export let activities = null;
   // svelte
   import { onMount } from "svelte";
 
@@ -17,9 +16,9 @@
   import helderberg from "../../data/albanyhelderbergrailtrail.gpx?raw";
 
   // utils
-  import { getActivities } from "../utils/api";
   import decodePolyline from "../utils/decode-polyline";
   import convert from "../utils/conversions";
+  import { activityData } from "../utils/store";
 
   let layerControl;
   let map;
@@ -114,24 +113,28 @@
   }
 
   // when activities loads, render the new layer
-  $: {
-    if (activities) {
-      const activitiesFiltered = activities.filter(a => a.type == "Ride")
-      const activitiesLayer = leaflet.layerGroup(activitiesFiltered.map(activity => {
-        const testltln = decodePolyline(activity.map);
-        return leaflet.polyline(testltln, {
-          color: 'red',
-          weight: 7,
-          opacity: 0.3,
-          smoothFactor: 1,
-          noClip: false,
-        }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`);
-      })).addTo(map);
-
-      layerControl.addOverlay(leaflet.layerGroup([activitiesLayer]), "Activities");
+  let activitiesLayer = {};
+  activityData.subscribe(activities => {
+    // rewrite all this to make each activity a layer
+    if (activities.length > 0) {
+      activities.forEach(activity => {
+        if (activity.show && !activitiesLayer[activity.id]) {
+          const testltln = decodePolyline(activity.map);
+          activitiesLayer[activity.id] = leaflet.polyline(testltln, {
+            color: 'red',
+            weight: 7,
+            opacity: 0.3,
+            smoothFactor: 1,
+            noClip: false,
+          }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`)
+            .addTo(map);
+        } else if (!activity.show && activitiesLayer[activity.id]) {
+          map.removeLayer(activitiesLayer[activity.id]);
+          delete activitiesLayer[activity.id];
+        }
+      })
     }
-  }
-
+  })
   // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
   onMount(renderMap);
 </script>

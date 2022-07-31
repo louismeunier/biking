@@ -1,7 +1,7 @@
 import { themes } from "./toast-themes";
 import { toast } from "@zerodevx/svelte-toast";
 
-interface Activity {
+export interface Activity {
     id: number,
     name: string,
     type: string,
@@ -18,7 +18,8 @@ interface Activity {
     kilojoules?: number,
     average_heartrate?: number,
     max_heartrate?: number,
-    calories?: number
+    calories?: number,
+    show: boolean
 }
 
 export async function getActivities(): Promise<Activity[]> {
@@ -28,7 +29,7 @@ export async function getActivities(): Promise<Activity[]> {
     const activities = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });
-    return activities;
+    return activities.map(a => { a.show = true; return a;});
   } catch (error) {
     toast.pop()
     toast.push("Error loading activities!", { theme: themes.error });

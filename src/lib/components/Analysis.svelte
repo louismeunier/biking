@@ -1,12 +1,15 @@
 <script lang="ts">
     import convert from "../utils/conversions";
-    export let activities;
+    import { activityData } from "../utils/store";
 
+    let activities;
     let sort = {
         key: "start_date",
         order: "desc"
     };
 
+    activityData.subscribe(a => activities = a)
+       
     const handleSort = param => {
         if (param === sort.key) {
             sort.order = sort.order === "asc" ? "desc" : "asc";
@@ -58,7 +61,19 @@
                         {sort.key === "average_speed" ? (sort.order === "asc" ? "▼" : "▲") : "‐"}
                     </button>
                 </td>
-                <!-- <td>toggle on map</td> -->
+                <td class="toggle">
+                    toggle
+                    <input
+                        type="checkbox"
+                        checked={true}
+                        on:change={e => activityData.update(acs => acs.map(activity => {
+                                // @ts-ignore
+                                activity.show = e.target.checked;
+                                return activity
+                            }))
+                        }
+                    />
+                </td>
             </tr>
         </thead>
         <tbody>
@@ -69,7 +84,21 @@
                         <td>{convert.metersToMiles(a.distance)}</td>
                         <td>{convert.secondsToHours(a.moving_time)}</td>
                         <td>{convert.mpsToMph(a.average_speed)}</td>
-                        <!-- <td></td> -->
+                        <td class="toggle">
+                            <input 
+                                type="checkbox" 
+                                checked={a.show}
+                                on:change={() => activityData.update(as => {
+                                    return as.map(activity => {
+                                        if (a.id === activity.id) {
+                                            activity.show = !activity.show;
+                                        }
+                                        return activity
+                                    });
+                                 })
+                              }
+                            />
+                        </td>
                     </tr>
                 {/each}
             {/if}
@@ -88,6 +117,8 @@
 
     table {
         border-collapse: collapse;
+        margin-left: 0.5em;
+        margin-right: 0.5em;
     }
 
     table button {
@@ -106,6 +137,10 @@
         border: 1px solid black;
     }
 
+    .toggle {
+        width: min-content;
+    }
+    
     thead {
         font-weight: 900;
         background-color: lightblue;
