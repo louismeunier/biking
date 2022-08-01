@@ -124,9 +124,9 @@
           delete activitiesLayer[activity.id];
           const testltln = decodePolyline(activity.map);
           activitiesLayer[activity.id] = leaflet.polyline(testltln, {
-            color: activity.meta.highlight ? 'yellow' : 'red',
-            weight: activity.meta.highlight ? 12 : 7,
-            opacity: activity.meta.highlight ? 1 : 0.3,
+            color: 'red',
+            weight: activity.meta.highlight ? 14 : 7,
+            opacity: 0.3,
             smoothFactor: 1,
             noClip: false,
             zIndex: activity.meta.highlight ? 100 : 1
@@ -134,6 +134,7 @@
             .addTo(map);
             if (activity.meta.highlight) {
               activitiesLayer[activity.id].openPopup();
+              map.setView(activitiesLayer[activity.id].getCenter());
             }
         }
         if (activity.meta.show && !activitiesLayer[activity.id]) {

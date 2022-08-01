@@ -28,10 +28,14 @@
         scroll-behavior: smooth;
     }
     
+    main {
+        display: flex;
+    }
+
     .sidepanel {
         overflow-y: auto;
         height: fit-content;
-        margin-left: 50%;
+        width: 50%;
         right: 0;
     }
 
@@ -42,8 +46,7 @@
 
     .map-wrap {
         height: 100vh;
-        overflow: hidden;
-        position: fixed;
+        position: sticky;
         left: 0;
         top: 0;
         bottom: 0;
@@ -52,7 +55,6 @@
 
     :global(#map) {
         height: 100%;
-        overflow: hidden;
     }
 
     @media only screen and (max-width: 600px) {
