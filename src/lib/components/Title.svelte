@@ -19,6 +19,12 @@
         height: 100vh;
     }
 
+    @media only screen and (max-width: 600px) {
+       #footer {
+        height: 50vh;
+       }
+    }
+
     .down {
         animation: bounce 2s infinite;
     }

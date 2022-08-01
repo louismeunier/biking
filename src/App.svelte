@@ -36,7 +36,6 @@
         overflow-y: auto;
         height: fit-content;
         width: 50%;
-        right: 0;
     }
 
     :global(body) {
@@ -58,14 +57,15 @@
     }
 
     @media only screen and (max-width: 600px) {
+        main {
+            display: flex;
+            flex-direction: column;
+        }
         .map-wrap {
+            height: 50vh;
             width: 100%;
-            z-index: 999;
-            height: 50%;
         }
         .sidepanel {
-            margin-left: 0;
-            margin-top: 50%;
             width: 100%;
         }
     }
