@@ -1,7 +1,7 @@
 <div id="footer">
     <h1>Bike Trail Visualizer</h1>
     <img src="/bike.svg" alt="Bike Logo" height="55px"/>
-    <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava.</p>
+    <p>An automatically updating map of my (Louis Meunier's) biking activity from Strava. See the <a href="https://github.com/louismeunier/bike">source code</a> for more.</p>
     <a href="#analysis" title="Go to analysis">
         <img class="down" src="/down-arrow.png" alt="Down Arrow" height="25px"/>
     </a>
