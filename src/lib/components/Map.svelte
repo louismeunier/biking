@@ -94,7 +94,7 @@
         shadowUrl: null
       },
       polyline_options: {
-        color: 'blue',
+        color: 'cornflowerblue',
         weight: 4,
         opacity: 0.8,
         smoothFactor: 1,
@@ -116,7 +116,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(helderbergGroup).bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg Trail</strong>").addTo(map);
+    }).addTo(helderbergGroup).bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg-Hudson Rail Trail</strong>").addTo(map);
 
     const gpxElectric = new leaflet.GPX(electric, {
       async: true,
@@ -132,7 +132,7 @@
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(electricGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Electric Rail</strong>").addTo(map);
+    }).addTo(electricGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Albany Hudson Electric Rail</strong>").addTo(map);
 
     const gpxMohawkHudson = new leaflet.GPX(mohawk, {
       async: true,
@@ -153,7 +153,7 @@
     layerControl.addOverlay(parentGroup, "Trails");
     layerControl.addOverlay(erieGroup, "Erie Canalway Trail");
     layerControl.addOverlay(hudsonGroup, "Hudson Valley Greenway Trail");
-    layerControl.addOverlay(helderbergGroup, "Albany Helderberg Rail Trail");
+    layerControl.addOverlay(helderbergGroup, "Helderberg-Hudson Rail Trail");
     layerControl.addOverlay(electricGroup, "Albany Hudson Electric Rail");
     layerControl.addOverlay(mohawkGroup, "Mohawk Hudson Trail");
 

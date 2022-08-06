@@ -53,5 +53,16 @@ export const pointsOfInterest = [
         name: "Lock 7 Boat Launch",
         coordinates: [42.80339583927449, -73.84901529216272],
         description: ""
+    },
+    {
+        name: "Helderberg-Hudson Trail Head - Albany",
+        coordinates: [42.62770245920196, -73.76712069962032],
+        description: ""
+    },
+    {
+        name: "Helderberg-Hudson Trail Head - Voorheesville",
+        coordinates: [42.65557554586716, -73.92846339396719],
+        description: ""
     }
+
 ]
