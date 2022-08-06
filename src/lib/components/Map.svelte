@@ -209,7 +209,18 @@
     }
   })
   // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
-  onMount(renderMap);
+  onMount(() => {
+    renderMap();
+
+    document.querySelector(".leaflet-control-layers-overlays > label:nth-child(2) > span:nth-child(1) > input:nth-child(1)").addEventListener("change", e => {
+      const inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label:nth-child(n+2) > span > input")
+      inputs.forEach(input => {
+        if (input.checked != e.target.checked) {
+          input.click()
+        }
+      })
+  });
+  })
 </script>
 
 <div id="map"></div>
@@ -220,5 +231,14 @@
     flex-direction: column;
     align-items: center;
     gap: 0.3em;
+  }
+
+  :global(.leaflet-control-layers-overlays > *) {
+    margin-left: 1em;
+  }
+
+  :global(.leaflet-control-layers-overlays > label:nth-child(1)),
+  :global(.leaflet-control-layers-overlays > label:nth-child(2)){
+    margin-left: 0;
   }
 </style>
