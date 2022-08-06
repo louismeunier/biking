@@ -78,9 +78,9 @@
         shadowUrl: null
       },
       polyline_options: {
-        color: 'green',
+        color: 'lightgreen',
         weight: 4,
-        opacity: 0.5,
+        opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
@@ -96,7 +96,7 @@
       polyline_options: {
         color: 'blue',
         weight: 4,
-        opacity: 0.5,
+        opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
@@ -112,7 +112,7 @@
       polyline_options: {
         color: 'orange',
         weight: 4,
-        opacity: 0.5,
+        opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
@@ -128,11 +128,11 @@
       polyline_options: {
         color: 'navy',
         weight: 4,
-        opacity: 0.5,
+        opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(electricGroup).bindPopup("<img src='/empirestatetrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Electric Rail</strong>").addTo(map);
+    }).addTo(electricGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Electric Rail</strong>").addTo(map);
 
     const gpxMohawkHudson = new leaflet.GPX(mohawk, {
       async: true,
@@ -142,9 +142,9 @@
         shadowUrl: null
       },
       polyline_options: {
-        color: 'purple',
+        color: 'darkgreen',
         weight: 4,
-        opacity: 0.5,
+        opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
