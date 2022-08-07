@@ -70,7 +70,7 @@
     layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: false});
     parentGroup.addTo(map)
 
-    const gpxErie = new leaflet.GPX(erie, {
+    const polylineOptions = (color:string) => { return {
       async: true,
       marker_options: {
         startIconUrl: null,
@@ -78,77 +78,38 @@
         shadowUrl: null
       },
       polyline_options: {
-        color: 'lightgreen',
+        color: color,
         weight: 4,
         opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
       }
-    }).addTo(erieGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Erie Canalway Trail</strong>").addTo(map);
+    }};
 
-    const gpxHudson = new leaflet.GPX(hudson, {
-      async: true,
-      marker_options: {
-        startIconUrl: null,
-        endIconUrl: null,
-        shadowUrl: null
-      },
-      polyline_options: {
-        color: 'cornflowerblue',
-        weight: 4,
-        opacity: 0.8,
-        smoothFactor: 1,
-        noClip: false,
-      }
-    }).addTo(hudsonGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>").addTo(map);
+    const gpxErie = new leaflet.GPX(erie, polylineOptions("lightgreen"))
+      .addTo(erieGroup)
+      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Erie Canalway Trail</strong>")
+      .addTo(map);
 
-    const gpxHelderberg = new leaflet.GPX(helderberg, {
-      async: true,
-      marker_options: {
-        startIconUrl: null,
-        endIconUrl: null,
-        shadowUrl: null
-      },
-      polyline_options: {
-        color: 'orange',
-        weight: 4,
-        opacity: 0.8,
-        smoothFactor: 1,
-        noClip: false,
-      }
-    }).addTo(helderbergGroup).bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg-Hudson Rail Trail</strong>").addTo(map);
+    const gpxHudson = new leaflet.GPX(hudson, polylineOptions("cornflowerblue"))
+      .addTo(hudsonGroup)
+      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>")
+      .addTo(map);
 
-    const gpxElectric = new leaflet.GPX(electric, {
-      async: true,
-      marker_options: {
-        startIconUrl: null,
-        endIconUrl: null,
-        shadowUrl: null
-      },
-      polyline_options: {
-        color: 'navy',
-        weight: 4,
-        opacity: 0.8,
-        smoothFactor: 1,
-        noClip: false,
-      }
-    }).addTo(electricGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Albany Hudson Electric Rail</strong>").addTo(map);
+    const gpxHelderberg = new leaflet.GPX(helderberg, polylineOptions("orange"))
+      .addTo(helderbergGroup)
+      .bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg-Hudson Rail Trail</strong>")
+      .addTo(map);
 
-    const gpxMohawkHudson = new leaflet.GPX(mohawk, {
-      async: true,
-      marker_options: {
-        startIconUrl: null,
-        endIconUrl: null,
-        shadowUrl: null
-      },
-      polyline_options: {
-        color: 'darkgreen',
-        weight: 4,
-        opacity: 0.8,
-        smoothFactor: 1,
-        noClip: false,
-      }
-    }).addTo(mohawkGroup).bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Mohawk Hudson Trail</strong>").addTo(map);
+    const gpxElectric = new leaflet.GPX(electric, polylineOptions("navy"))
+      .addTo(electricGroup)
+      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Albany Hudson Electric Rail</strong>")
+      .addTo(map);
+
+    const gpxMohawkHudson = new leaflet.GPX(mohawk, polylineOptions("darkgreen"))
+      .addTo(mohawkGroup)
+      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Mohawk Hudson Trail</strong>")
+      .addTo(map);
 
     layerControl.addOverlay(parentGroup, "Trails");
     layerControl.addOverlay(erieGroup, "Erie Canalway Trail");
@@ -208,13 +169,15 @@
       })
     }
   })
-  // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
+  
   onMount(() => {
+    // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
     renderMap();
-
-    document.querySelector(".leaflet-control-layers-overlays > label:nth-child(2) > span:nth-child(1) > input:nth-child(1)").addEventListener("change", e => {
+    // make logic with the layer control make more sense
+    document.querySelector(".leaflet-control-layers-overlays > label:nth-child(2) > span:nth-child(1) > input:nth-child(1)").addEventListener("change", (e) => {
       const inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label:nth-child(n+2) > span > input")
-      inputs.forEach(input => {
+      inputs.forEach((input:HTMLInputElement) => {
+        // @ts-ignore
         if (input.checked != e.target.checked) {
           input.click()
         }
