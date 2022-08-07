@@ -1,3 +1,4 @@
+import { firestore } from "firebase-admin";
 import fetch from "node-fetch";
 import { getAuth, setAuth } from "./firebase-util";
 
@@ -106,26 +107,26 @@ export async function listActivityIds(db, limit) {
 
 /**
  * Get data streams for a Strava activity
- * @param {number} activityId The Strava ID of the activity
+ * @param {string[]} activityId The Strava ID of the activity
  * @param {string[]} streams The list of streams to get
  * @param {*} db An instance of the Firestore database
  */
-export async function getActivityStreams(activityId, streams, db) {
+export async function getActivityStreams(activityIds:string[], streams:string[], db) {
     const authToken = await getAuthorizationToken(db);
-
-    const url = BASE_URL(`/activities/${activityId}/streams?keys=${streams.join(",")}`);
-    const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
-    const activityStream = await response.json();
-    console.log(activityStream);
-
-    const formattedResponse: { [key: string]: any[]; }  = {};
-    activityStream.forEach(stream => {
-        if (stream.type === "latlng") {
-            formattedResponse.latlng = stream.data.map(point => { return {lat: point[0], lng: point[1]} });
-        } else {
-            formattedResponse[stream.type] = stream.data;
-        }
-    });
-    
-    return formattedResponse;
+    const response = {};
+    activityIds.forEach(async activityId => {
+        const url = BASE_URL(`/activities/${activityId}/streams/` + streams.join(","));
+        const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
+        const activityStream = await response.json();
+        const formattedResponse: { [key: string]: any[]; }  = {};
+        activityStream.forEach(stream => {
+            if (stream.type === "latlng") {
+                formattedResponse.latlng = stream.data.map(point => { return {lat: point[0], lng: point[1]} });
+            } else {
+                formattedResponse[stream.type] = stream.data;
+            }
+        });
+        response[activityId] = formattedResponse;
+    })
+    return response;
 }

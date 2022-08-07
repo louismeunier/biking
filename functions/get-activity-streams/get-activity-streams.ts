@@ -7,9 +7,9 @@ export const handler: Handler = async function (event, context) {
   try {
     const queryStringParameters = event.queryStringParameters;
     const streamKeys = queryStringParameters?.streams;
-    const activityId = queryStringParameters?.id;
+    const activityIds = queryStringParameters?.ids;
 
-    if (!streamKeys || !activityId) {
+    if (!streamKeys || !activityIds) {
       return {
         headers: {
           "Access-Control-Allow-Origin": "*"
@@ -20,11 +20,12 @@ export const handler: Handler = async function (event, context) {
     }
     
     const streamKeysArray = streamKeys.split(',');
+    const activityIdsArray = activityIds.split(',');
 
     const admin = await authorize();
     const db = admin.firestore();
 
-    const activityStreams = await getActivityStreams(activityId, streamKeysArray, db);
+    const activityStreams = await getActivityStreams(activityIdsArray, streamKeysArray, db);
 
     return {
       headers: {
