@@ -118,6 +118,7 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
         const url = BASE_URL(`/activities/${activityId}/streams/?keys=` + streams.join(","));
         const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
         const activityStream = await response.json();
+        console.log(activityStream);
         const formattedResponse: { [key: string]: any[]; }  = {};
         activityStream.forEach(stream => {
             if (stream.type === "latlng") {
@@ -126,6 +127,7 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
                 formattedResponse[stream.type] = stream.data;
             }
         });
+        console.log(formattedResponse);
         response[activityId] = formattedResponse;
     })
     return response;
