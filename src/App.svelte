@@ -30,22 +30,26 @@
     
     main {
         display: flex;
+        height: fit-content;
     }
 
     .sidepanel {
-        overflow-y: auto;
-        height: fit-content;
         width: 50%;
+        position: sticky;
+        padding-left: 0.5em;
+        padding-right: 0.5em;
+        margin-left: 50%;
     }
 
     :global(body) {
         margin: 0;
         padding: 0;
+        height: fit-content;
     }
 
     .map-wrap {
         height: 100vh;
-        position: sticky;
+        position: fixed;
         left: 0;
         top: 0;
         bottom: 0;
