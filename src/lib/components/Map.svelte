@@ -70,6 +70,14 @@
     layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: false});
     parentGroup.addTo(map)
 
+    map.on('layeradd', e => {
+      erieGroup.bringToBack();
+      hudsonGroup.bringToBack();
+      helderbergGroup.bringToBack();
+      electricGroup.bringToBack();
+      mohawkGroup.bringToBack();
+    })
+
     const polylineOptions = (color:string) => { return {
       async: true,
       marker_options: {
