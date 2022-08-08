@@ -66,16 +66,16 @@
     const helderbergGroup = leaflet.featureGroup.subGroup(parentGroup);
     const electricGroup = leaflet.featureGroup.subGroup(parentGroup);
     const mohawkGroup = leaflet.featureGroup.subGroup(parentGroup);
-
+    
     layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: false});
     parentGroup.addTo(map)
 
     map.on('layeradd', e => {
-      erieGroup.bringToBack();
-      hudsonGroup.bringToBack();
       helderbergGroup.bringToBack();
       electricGroup.bringToBack();
       mohawkGroup.bringToBack();
+      erieGroup.bringToBack();
+      hudsonGroup.bringToBack();
     })
 
     const polylineOptions = (color:string) => { return {
