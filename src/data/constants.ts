@@ -63,6 +63,11 @@ export const pointsOfInterest = [
         name: "Helderberg-Hudson Trail Head - Voorheesville",
         coordinates: [42.65557554586716, -73.92846339396719],
         description: ""
+    },
+    {
+        name: "Albany Hudson Electric Trail Head",
+        coordinates: [42.61453200394984, -73.72815578960423],
+        description: ""
     }
 
 ]
