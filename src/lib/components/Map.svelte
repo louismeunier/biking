@@ -17,6 +17,7 @@
   import helderberg from "../../data/albanyhelderbergrailtrail.gpx?raw";
   import electric from "../../data/albanyhudsonelectrictrail.gpx?raw";
   import mohawk from "../../data/mohawkhudson.gpx?raw";
+  import champlain from "../../data/champlainvalley.gpx?raw";
 
   // utils
   import decodePolyline from "../utils/decode-polyline";
@@ -66,7 +67,8 @@
     const helderbergGroup = leaflet.featureGroup.subGroup(parentGroup);
     const electricGroup = leaflet.featureGroup.subGroup(parentGroup);
     const mohawkGroup = leaflet.featureGroup.subGroup(parentGroup);
-    
+    const champlainGroup = leaflet.featureGroup.subGroup(parentGroup);
+
     layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: false});
     parentGroup.addTo(map)
 
@@ -76,6 +78,7 @@
       mohawkGroup.bringToBack();
       erieGroup.bringToBack();
       hudsonGroup.bringToBack();
+      champlainGroup.bringToBack();
     })
 
     const polylineOptions = (color:string) => { return {
@@ -119,13 +122,19 @@
       .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Mohawk Hudson Trail</strong>")
       .addTo(map);
 
+
+    const gpxChamplain = new leaflet.GPX(champlain, polylineOptions("purple"))
+      .addTo(champlainGroup)
+      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Champlain Valley Trail</strong>")
+      .addTo(map);
+
     layerControl.addOverlay(parentGroup, "Trails");
     layerControl.addOverlay(erieGroup, "Erie Canalway Trail");
     layerControl.addOverlay(hudsonGroup, "Hudson Valley Greenway Trail");
     layerControl.addOverlay(helderbergGroup, "Helderberg-Hudson Rail Trail");
     layerControl.addOverlay(electricGroup, "Albany Hudson Electric Rail");
     layerControl.addOverlay(mohawkGroup, "Mohawk Hudson Trail");
-
+    layerControl.addOverlay(champlainGroup, "Champlain Valley Trail");
     layerControl.addTo(map);
 
     erieGroup.addTo(map);
@@ -133,6 +142,7 @@
     helderbergGroup.addTo(map);
     electricGroup.addTo(map);
     mohawkGroup.addTo(map);
+    champlainGroup.addTo(map);
   }
 
   // when activities loads, render the new layer
