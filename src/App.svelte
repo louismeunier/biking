@@ -35,7 +35,6 @@
 
     .sidepanel {
         width: 50%;
-        position: sticky;
         padding-left: 0.5em;
         padding-right: 0.5em;
         margin-left: 50%;
@@ -61,16 +60,20 @@
     }
 
     @media only screen and (max-width: 600px) {
-        main {
-            display: flex;
-            flex-direction: column;
+        .sidepanel {
+            width: 100%;
+            margin-left: 0;
+            margin-top: 48vh;
+            text-align: center;
         }
         .map-wrap {
             height: 50vh;
-            width: 100%;
-        }
-        .sidepanel {
-            width: 100%;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            width: 100vw;
+            z-index: 1000;
         }
     }
 </style>
