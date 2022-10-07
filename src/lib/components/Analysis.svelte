@@ -1,7 +1,9 @@
 <script lang="ts">
+    import { getActivityStreams } from "../utils/api";
     import convert from "../utils/conversions";
     import { activityData } from "../utils/store";
 
+    // at some point I should replace the updates with a central function to remove all the in-html js
     let activities;
     let sort = {
         key: "start_date",
@@ -41,21 +43,21 @@
                     </button>
                 </td>
                 <td>
-                    distance (miles)
+                    dist (mi)
                     <br/>
                     <button on:click={() => handleSort('distance')}>
                         {sort.key === "distance" ? (sort.order === "asc" ? "▼" : "▲") : "‐"}
                     </button>
                 </td>
                 <td>
-                    time (hours)
+                    time (hrs)
                     <br/>
                     <button on:click={() => handleSort('moving_time')}>
                         {sort.key === "moving_time" ? (sort.order === "asc" ? "▼" : "▲") : "‐"}
                     </button>
                 </td>
                 <td>
-                    average speed (mph)
+                    avg speed (mph)
                     <br/>
                     <button on:click={() => handleSort('average_speed')}>
                         {sort.key === "average_speed" ? (sort.order === "asc" ? "▼" : "▲") : "‐"}
@@ -74,6 +76,9 @@
                         }
                     />
                 </td>
+                <!-- <td>
+                    see more
+                </td> -->
             </tr>
         </thead>
         <tbody>
@@ -103,6 +108,16 @@
                                     });
                                  })
                         }}
+                        on:dblclick={()=>{
+                            activityData.update(as => {
+                                    return as.map(activity => {
+                                        if (a.id === activity.id) {
+                                            activity.meta.show = !activity.meta.show;
+                                        }
+                                        return activity
+                                    });
+                                 })
+                        }}
                     >
                         <td>{new Date(a.start_date).toLocaleDateString()}</td>
                         <td>{convert.metersToMiles(a.distance)}</td>
@@ -123,12 +138,20 @@
                               }
                             />
                         </td>
+                        <!-- <td>
+                            <button
+                                on:click={async () => {
+                                    const stream = await getActivityStreams(a.id);
+                                    console.log(stream)
+                                }}
+                            >></button>
+                        </td> -->
                     </tr>
                 {/each}
             {/if}
         </tbody>
     </table>
-    
+    <h2>Trends</h2>
 </div>
 
 <style>
@@ -136,7 +159,7 @@
         display: flex;
         flex-direction: column;
         height: 100vh;
-        align-items: center;
+        text-align: center;
     }
 
     table {

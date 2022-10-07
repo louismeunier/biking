@@ -3,11 +3,12 @@
   import { onMount } from "svelte";
 
   // leaflet
-  import leaflet from "leaflet";
+  import leaflet, { type LeafletEvent } from "leaflet";
   import "leaflet/dist/leaflet.css";
   import markerShadow from "/marker-shadow.png";
   import markerIcon from "/marker-icon.png";
   import gpx from "leaflet-gpx";
+
   import "leaflet.featuregroup.subgroup";
 
   // data
@@ -81,6 +82,7 @@
       champlainGroup.bringToBack();
     })
 
+    // shorthand for polyline options, only changes color
     const polylineOptions = (color:string) => { return {
       async: true,
       marker_options: {
@@ -90,7 +92,7 @@
       },
       polyline_options: {
         color: color,
-        weight: 4,
+        weight: 8,
         opacity: 0.8,
         smoothFactor: 1,
         noClip: false,
@@ -158,7 +160,7 @@
           const testltln = decodePolyline(activity.map);
           activitiesLayer[activity.id] = leaflet.polyline(testltln, {
             color: 'red',
-            weight: activity.meta.highlight ? 14 : 7,
+            weight: activity.meta.highlight ? 14 : 4,
             opacity: 0.3,
             smoothFactor: 1,
             noClip: false,
@@ -174,7 +176,7 @@
           const testltln = decodePolyline(activity.map);
           activitiesLayer[activity.id] = leaflet.polyline(testltln, {
             color: 'red',
-            weight: activity.meta.highlight ? 14 : 7,
+            weight: activity.meta.highlight ? 14 : 4,
             opacity: 0.3,
             smoothFactor: 1,
             noClip: false,
