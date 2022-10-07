@@ -1,3 +1,5 @@
+import type { LatLngExpression } from "leaflet"
+
 // https://github.com/jhermsmeier/node-google-polyline
 var PRECISION = 1e5
 
@@ -39,9 +41,9 @@ function integers(value:string, callback:Function):number {
 /**
  * Converts an encoded polyline string to an array of points.
  * @param {string} value The encoded polyline string
- * @returns {Array[Array[number]]} An array of coordinates
+ * @returns {LatLngExpression[][]} An array of coordinates
  */
-export default function decodePolyline( value:string ):Array<Array<number>> {
+export default function decodePolyline( value:string ):LatLngExpression[][] {
   var points = []
   var lat = 0
   var lon = 0
