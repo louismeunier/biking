@@ -1,4 +1,12 @@
-export const pointsOfInterest = [
+import type { LatLngExpression } from "leaflet";
+
+interface POI {
+    name: string;
+    coordinates: LatLngExpression;
+    description: string;
+}
+
+export const pointsOfInterest:POI[] = [
     {
         name: "USS Slater",
         coordinates: [42.64249539267223, -73.74976155982455],
