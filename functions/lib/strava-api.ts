@@ -129,6 +129,7 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
         });
         console.log(formattedResponse);
         response[activityId] = formattedResponse;
+        return formattedResponse
     }))
     return response;
 }
