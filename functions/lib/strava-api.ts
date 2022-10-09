@@ -113,13 +113,13 @@ export async function listActivityIds(db, limit) {
  */
 export async function getActivityStreams(activityIds:string[], streams:string[], db) {
     const authToken = await getAuthorizationToken(db);
-    const response = {};
+    const response:{ [key: number]: { [key: string]: any[] }} = {};
     await Promise.all(activityIds.map(async activityId => {
         const url = BASE_URL(`/activities/${activityId}/streams/?keys=` + streams.join(","));
         const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
         const activityStream = await response.json();
-        console.log(activityStream);
         const formattedResponse: { [key: string]: any[]; }  = {};
+
         activityStream.forEach(stream => {
             if (stream.type === "latlng") {
                 formattedResponse.latlng = stream.data.map(point => { return {lat: point[0], lng: point[1]} });
@@ -127,9 +127,10 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
                 formattedResponse[stream.type] = stream.data;
             }
         });
-        console.log(formattedResponse);
-        response[activityId] = formattedResponse;
-        return formattedResponse
+
+        response.activityId = formattedResponse;
+        return activityStream;
     }))
+    console.log(response)
     return response;
 }
