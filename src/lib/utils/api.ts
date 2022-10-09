@@ -56,7 +56,7 @@ export async function getActivities(): Promise<Activity[]> {
 export async function getActivityStreams(id): Promise<Activity[]> {
   try {
     toast.push("Loading activity data...", { theme: themes.wait, dismissable: false, duration: 10000 });
-    const request = await fetch(`https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity-streams?id=${id}&streams=heartrate,time`);
+    const request = await fetch(`https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity-streams?ids=${id}&streams=heartrate,time`);
     const activitiesStreams = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });

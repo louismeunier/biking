@@ -114,7 +114,7 @@ export async function listActivityIds(db, limit) {
 export async function getActivityStreams(activityIds:string[], streams:string[], db) {
     const authToken = await getAuthorizationToken(db);
     const response = {};
-    activityIds.forEach(async activityId => {
+    await Promise.all(activityIds.map(async activityId => {
         const url = BASE_URL(`/activities/${activityId}/streams/?keys=` + streams.join(","));
         const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
         const activityStream = await response.json();
@@ -129,6 +129,6 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
         });
         console.log(formattedResponse);
         response[activityId] = formattedResponse;
-    })
+    }))
     return response;
 }
