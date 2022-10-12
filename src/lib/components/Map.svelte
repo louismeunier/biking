@@ -70,7 +70,7 @@
     const mohawkGroup = leaflet.featureGroup.subGroup(parentGroup);
     const champlainGroup = leaflet.featureGroup.subGroup(parentGroup);
 
-    layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: false});
+    layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: true});
     parentGroup.addTo(map)
 
     map.on('layeradd', e => {
@@ -164,7 +164,7 @@
             opacity: 0.3,
             smoothFactor: 1,
             noClip: false,
-            zIndex: activity.meta.highlight ? 100 : 1
+            // zIndex: activity.meta.highlight ? 100 : 1
           }).bindPopup(`${activity.name}<br>${new Date(activity.start_date).toLocaleString()}<br>${convert.metersToMiles(activity.distance)} miles<br>${convert.secondsToHours(activity.moving_time)} hours`)
             .addTo(map);
             if (activity.meta.highlight) {
