@@ -1,6 +1,9 @@
 import { themes } from "./toast-themes";
 import { toast } from "@zerodevx/svelte-toast";
 
+// handle local vs remote netlify functions
+const apiBase = (path: string) => location.host == "localhost" ? `/.netlify/functions/${path}` : `http://localhost:8008/${path}`;
+
 export interface Activity {
     id: number,
     name: string,
@@ -42,7 +45,7 @@ async function fetchCached(url: string) {
 export async function getActivities(): Promise<Activity[]> {
   try {
     toast.push("Loading activitiy data...", { theme: themes.wait, dismissable: false, duration: 10000 });
-    const activities = await fetchCached("https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity");
+    const activities = await fetchCached(apiBase("get-activity"));
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });
     return activities.map(a => { a.meta = { show: true, highlight: false } ; return a;});
@@ -56,7 +59,7 @@ export async function getActivities(): Promise<Activity[]> {
 export async function getActivityStreams(id): Promise<Activity[]> {
   try {
     toast.push("Loading activity data...", { theme: themes.wait, dismissable: false, duration: 10000 });
-    const request = await fetch(`https://magical-fox-098a60.netlify.app/.netlify/functions/get-activity-streams?ids=${id}&streams=heartrate,time`);
+    const request = await fetchCached(apiBase(`get-activity-streams?ids=${id}&streams=heartrate,time`));
     const activitiesStreams = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });

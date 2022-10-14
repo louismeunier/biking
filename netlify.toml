@@ -1,8 +1,12 @@
+[dev]
+  command = "yarn dev"
+  framework = "svelte"
+  functionsPort = 8008
+[[headers]]
+for = "/*"
+  [headers.values]
+  Access-Control-Allow-Origin = "*"
+
 [build]
   functions = "functions"
   publish = "dist"
-[[redirects]]
-from = "/.netlify/functions"
-to = "/api"
-status = 301
-force = false
