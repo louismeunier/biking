@@ -2,7 +2,7 @@ import { themes } from "./toast-themes";
 import { toast } from "@zerodevx/svelte-toast";
 
 // handle local vs remote netlify functions
-const apiBase = (path: string) => location.hostname == "localhost" || "127.0.0.1" ? `http://localhost:8008/${path}` : `/.netlify/functions/${path}`;
+const apiBase = (path: string) => location.hostname == "localhost" || location.hostname == "127.0.0.1" ? `http://localhost:8008/${path}` : `/.netlify/functions/${path}`;
 
 export interface Activity {
     id: number,
