@@ -112,9 +112,9 @@ export async function listActivityIds(db, limit) {
  * @param {*} db An instance of the Firestore database
  */
 export async function getActivityStreams(activityIds:string[], streams:string[], db) {
+    // this is really dirty man idk
     const authToken = await getAuthorizationToken(db);
-    const response:{ [key: number]: { [key: string]: any[] }} = {};
-    await Promise.all(activityIds.map(async activityId => {
+    const formattedResponsesArray = await Promise.all(activityIds.map(async activityId => {
         const url = BASE_URL(`/activities/${activityId}/streams/?keys=` + streams.join(","));
         const response = await fetch(url, { headers: { Authorization: `Bearer ${authToken}` } });
         const activityStream = await response.json();
@@ -128,9 +128,14 @@ export async function getActivityStreams(activityIds:string[], streams:string[],
             }
         });
 
-        response.activityId = formattedResponse;
-        return activityStream;
+        // response.activityId = formattedResponse;
+        return formattedResponse;
     }))
-    console.log(response)
+
+    const response:{ [key: number]: { [key: string]: any[] }} = {};
+
+    formattedResponsesArray.forEach((formattedResponse, index) => {
+        response[activityIds[index]] = formattedResponse;
+    })
     return response;
 }
