@@ -2,7 +2,7 @@ import { themes } from "./toast-themes";
 import { toast } from "@zerodevx/svelte-toast";
 
 // handle local vs remote netlify functions
-const apiBase = (path: string) => location.host == "localhost" ? `/.netlify/functions/${path}` : `http://localhost:8008/${path}`;
+const apiBase = (path: string) => location.hostname == "localhost" || "127.0.0.1" ? `http://localhost:8008/${path}` : `/.netlify/functions/${path}`;
 
 export interface Activity {
     id: number,
@@ -59,8 +59,8 @@ export async function getActivities(): Promise<Activity[]> {
 export async function getActivityStreams(id): Promise<Activity[]> {
   try {
     toast.push("Loading activity data...", { theme: themes.wait, dismissable: false, duration: 10000 });
-    const request = await fetchCached(apiBase(`get-activity-streams?ids=${id}&streams=heartrate,time`));
-    const activitiesStreams = await request.json();
+    const activitiesStreams = await fetchCached(apiBase(`get-activity-streams?ids=${id}&streams=heartrate,time`));
+    // const activitiesStreams = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });
     return activitiesStreams;
