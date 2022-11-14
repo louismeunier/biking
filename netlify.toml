@@ -1,7 +1,7 @@
 [dev]
-  command = "yarn dev"
-  framework = "svelte"
+  framework = "vite"
   functionsPort = 8008
+  targetPort=5173
 [[headers]]
 for = "/*"
   [headers.values]
