@@ -3,90 +3,27 @@
   import { onMount } from "svelte";
 
   // leaflet
-  import leaflet, { type LeafletEvent } from "leaflet";
+  import leaflet from "leaflet";
   import "leaflet/dist/leaflet.css";
   import markerShadow from "/marker-shadow.png";
   import markerIcon from "/marker-icon.png";
-  import gpx from "leaflet-gpx";
-
   import "leaflet.featuregroup.subgroup";
+  import "leaflet-gpx";
 
   // data
   import { pointsOfInterest } from "../../data/constants";
-  import erie from "../../data/eriecanalway.gpx?raw";
-  import hudson from "../../data/hudsonvalleygreenway.gpx?raw";
-  import helderberg from "../../data/albanyhelderbergrailtrail.gpx?raw";
-  import electric from "../../data/albanyhudsonelectrictrail.gpx?raw";
-  import mohawk from "../../data/mohawkhudson.gpx?raw";
-  import champlain from "../../data/champlainvalley.gpx?raw";
-  import oldmontreal from "../../data/oldmontreal.gpx?raw";
+  import { trailSettings } from "../../data/trails";
 
   // utils
   import decodePolyline from "../utils/decode-polyline";
   import convert from "../utils/conversions";
   import { activityData } from "../utils/store";
 
-  let layerControl;
-  let map;
+  let layerControl: leaflet.Control.Layers;
+  let map:L.Map;
 
-  async function renderMap() {
-    map = leaflet.map('map').setView([42.77, -73.86], 10);
-    // creating layers
-    // base layers
-    const osmLayer = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-    }).addTo(map);
-
-    const satteliteLayer = leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
-      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
-    })
-
-    const baseMaps = {
-      "OpenStreetMap": osmLayer,
-      "Satellite": satteliteLayer
-    };
-
-    // overlay layers
-    const poisLayer = leaflet.layerGroup(pointsOfInterest.map(point => {
-      var marker = leaflet.marker(point.coordinates, {
-        icon: leaflet.icon({
-          iconUrl: markerIcon,
-          shadowUrl: markerShadow,
-          iconSize: [25, 41],
-          iconAnchor: [12, 41],
-          popupAnchor: [1, -34],
-          shadowSize: [41, 41]
-        })
-      })
-      marker.bindPopup(point.name);
-      return marker;
-    }));
-
-    // trails
-    const parentGroup = leaflet.featureGroup();
-    const erieGroup = leaflet.featureGroup.subGroup(parentGroup)
-    const hudsonGroup = leaflet.featureGroup.subGroup(parentGroup);
-    const helderbergGroup = leaflet.featureGroup.subGroup(parentGroup);
-    const electricGroup = leaflet.featureGroup.subGroup(parentGroup);
-    const mohawkGroup = leaflet.featureGroup.subGroup(parentGroup);
-    const champlainGroup = leaflet.featureGroup.subGroup(parentGroup);
-    const montrealGroup = leaflet.featureGroup.subGroup(parentGroup);
-
-    layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: true});
-    parentGroup.addTo(map)
-
-    map.on('layeradd', e => {
-      helderbergGroup.bringToBack();
-      electricGroup.bringToBack();
-      mohawkGroup.bringToBack();
-      erieGroup.bringToBack();
-      hudsonGroup.bringToBack();
-      champlainGroup.bringToBack();
-      montrealGroup.bringToBack();
-    })
-
-    // shorthand for polyline options, only changes color
-    const polylineOptions = (color:string) => { return {
+  // utilities 
+  const polylineOptions = (color:string) => { return {
       async: true,
       marker_options: {
         startIconUrl: null,
@@ -102,59 +39,77 @@
       }
     }};
 
-    const gpxErie = new leaflet.GPX(erie, polylineOptions("lightgreen"))
-      .addTo(erieGroup)
-      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Erie Canalway Trail</strong>")
-      .addTo(map);
+    const trailPopupTemplate = (name:string, imageUrl:string, imageAlt:string):string => {
+      return `<img src=${imageUrl} height='40px' alt='${imageAlt}'/>
+      <br/>
+      <strong class='trail'>${name}</strong>`
+    }
 
-    const gpxHudson = new leaflet.GPX(hudson, polylineOptions("cornflowerblue"))
-      .addTo(hudsonGroup)
-      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Hudson Valley Greenway Trail</strong>")
-      .addTo(map);
+  async function renderMap() {
+    map = leaflet.map('map').setView([42.77, -73.86], 10);
 
-    const gpxHelderberg = new leaflet.GPX(helderberg, polylineOptions("orange"))
-      .addTo(helderbergGroup)
-      .bindPopup("<img src='/helderbergtrail.jpg' height='40px' alt='EST'/><br/><strong class='trail'>Helderberg-Hudson Rail Trail</strong>")
-      .addTo(map);
+    // base layers
+    const osmLayer = leaflet.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
 
-    const gpxElectric = new leaflet.GPX(electric, polylineOptions("navy"))
-      .addTo(electricGroup)
-      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Albany Hudson Electric Rail</strong>")
-      .addTo(map);
+    const satelliteLayer = leaflet.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+      attribution: 'Tiles &copy; Esri &mdash; Source: Esri, i-cubed, USDA, USGS, AEX, GeoEye, Getmapping, Aerogrid, IGN, IGP, UPR-EGP, and the GIS User Community'
+    })
 
-    const gpxMohawkHudson = new leaflet.GPX(mohawk, polylineOptions("darkgreen"))
-      .addTo(mohawkGroup)
-      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Mohawk Hudson Trail</strong>")
-      .addTo(map);
+    const Stadia_AlidadeSmoothDark = leaflet.tileLayer('https://tiles.stadiamaps.com/tiles/alidade_smooth_dark/{z}/{x}/{y}{r}.png', {
+      maxZoom: 20,
+      attribution: '&copy; <a href="https://stadiamaps.com/">Stadia Maps</a>, &copy; <a href="https://openmaptiles.org/">OpenMapTiles</a> &copy; <a href="http://openstreetmap.org">OpenStreetMap</a> contributors'
+    });
 
+    const baseMaps = {
+      "OpenStreetMap": osmLayer,
+      "Satellite": satelliteLayer,
+      "Dark Mode": Stadia_AlidadeSmoothDark
+    };
 
-    const gpxChamplain = new leaflet.GPX(champlain, polylineOptions("purple"))
-      .addTo(champlainGroup)
-      .bindPopup("<img src='/empirestatetrail.png' height='40px' alt='EST'/><br/><strong class='trail'>Champlain Valley Trail</strong>")
-      .addTo(map);
+    // overlay layers
+    const poisLayer = leaflet.layerGroup(pointsOfInterest.map(point => {
+      return leaflet.marker(point.coordinates, {
+        icon: leaflet.icon({
+          iconUrl: markerIcon,
+          shadowUrl: markerShadow,
+          iconSize: [25, 41],
+          iconAnchor: [12, 41],
+          popupAnchor: [1, -34],
+          shadowSize: [41, 41]
+        })
+      }).bindPopup(point.name)
+    }));
 
-    const gpxMontreal = new leaflet.GPX(oldmontreal, polylineOptions("orange"))
-      .addTo(montrealGroup)
-      .bindPopup("<img src='/veloquebec.png' height='40px' alt='EST'/><br/><strong class='trail'>Montreal Trail</strong>")
-      .addTo(map);
+    const parentGroup = leaflet.featureGroup();
 
+    layerControl = leaflet.control.layers(baseMaps, {"Points of Interest": poisLayer}, {collapsed: true});
     layerControl.addOverlay(parentGroup, "Trails");
-    layerControl.addOverlay(erieGroup, "Erie Canalway Trail");
-    layerControl.addOverlay(hudsonGroup, "Hudson Valley Greenway Trail");
-    layerControl.addOverlay(helderbergGroup, "Helderberg-Hudson Rail Trail");
-    layerControl.addOverlay(electricGroup, "Albany Hudson Electric Rail");
-    layerControl.addOverlay(mohawkGroup, "Mohawk Hudson Trail");
-    layerControl.addOverlay(champlainGroup, "Champlain Valley Trail");
-    layerControl.addOverlay(montrealGroup, "Old Montreal");
+
+    parentGroup.addTo(map)
     layerControl.addTo(map);
 
-    erieGroup.addTo(map);
-    hudsonGroup.addTo(map);
-    helderbergGroup.addTo(map);
-    electricGroup.addTo(map);
-    mohawkGroup.addTo(map);
-    champlainGroup.addTo(map);
-    montrealGroup.addTo(map);
+    // trails
+    trailSettings.forEach(trail => {
+      const trailGroup = leaflet.featureGroup.subGroup(parentGroup);
+
+      map.on("layeradd", e => {
+        trailGroup.bringToBack();
+      })
+
+      const { name, color, gpx, image, imageAlt } = trail;
+
+      new leaflet.GPX(
+        gpx, 
+        polylineOptions(color)
+      ).addTo(trailGroup).bindPopup(
+        trailPopupTemplate(name, image, imageAlt)
+      ).addTo(map);
+
+      layerControl.addOverlay(trailGroup, name);
+      trailGroup.addTo(map);
+    })
   }
 
   // when activities loads, render the new layer
@@ -179,6 +134,7 @@
             .addTo(map);
             if (activity.meta.highlight) {
               activitiesLayer[activity.id].openPopup();
+              // map.flyTo(activitiesLayer[activity.id].getCenter(), 10);
               map.setView(activitiesLayer[activity.id].getCenter());
             }
         }
@@ -204,15 +160,16 @@
     // need to wait for the container to render otherwise Leaflet won't be able to find to element to render the map to
     renderMap();
     // make logic with the layer control make more sense
-    document.querySelector(".leaflet-control-layers-overlays > label:nth-child(2) > span:nth-child(1) > input:nth-child(1)").addEventListener("change", (e) => {
-      const inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label:nth-child(n+2) > span > input")
-      inputs.forEach((input:HTMLInputElement) => {
-        // @ts-ignore
-        if (input.checked != e.target.checked) {
-          input.click()
-        }
-      })
-  });
+    document.querySelector(".leaflet-control-layers-overlays > label:nth-child(2) > span:nth-child(1) > input:nth-child(1)")
+      .addEventListener("change", (e:InputEvent) => {
+        const inputs = document.querySelectorAll(".leaflet-control-layers-overlays > label:nth-child(n+2) > span > input")
+        inputs.forEach((input:HTMLInputElement) => {
+          // @ts-ignore
+          if (input.checked != e.target.checked) {
+            input.click()
+          }
+        })
+    });
   })
 </script>
 
