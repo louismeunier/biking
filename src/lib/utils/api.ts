@@ -4,30 +4,6 @@ import { toast } from "@zerodevx/svelte-toast";
 // handle local vs remote netlify functions
 const apiBase = (path: string) => location.hostname == "localhost" || location.hostname == "127.0.0.1" ? `http://localhost:8008/${path}` : `/.netlify/functions/${path}`;
 
-export interface Activity {
-    id: number,
-    name: string,
-    type: string,
-    distance: number,
-    moving_time: number,
-    elapsed_time: number,
-    start_date: string,
-    map: string,
-    start_latlng: number[],
-    end_latlng: number[],
-    average_speed: number,
-    max_speed: number,
-    average_watts?: number,
-    kilojoules?: number,
-    average_heartrate?: number,
-    max_heartrate?: number,
-    calories?: number,
-    meta: {
-      show: boolean,
-      highlight: boolean,
-    }
-}
-
 async function fetchCached(url: string) {
   const cache = JSON.parse(localStorage.getItem(url));
   if (cache && cache.expires > Date.now()) {
@@ -56,10 +32,10 @@ export async function getActivities(): Promise<Activity[]> {
   }
 }
 
-export async function getActivityStreams(id): Promise<Activity[]> {
+export async function getActivityStreams(id): Promise<{[key: string]: ActivityStream}> {
   try {
     toast.push("Loading activity data...", { theme: themes.wait, dismissable: false, duration: 10000 });
-    const activitiesStreams = await fetchCached(apiBase(`get-activity-streams?ids=${id}&streams=heartrate,time`));
+    const activitiesStreams = await fetchCached(apiBase(`get-activity-streams?ids=${id}&streams=heartrate,time,altitude,temp,watts`));
     // const activitiesStreams = await request.json();
     toast.pop();
     toast.push("Activities loaded!", { theme: themes.success });

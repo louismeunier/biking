@@ -1,4 +1,4 @@
-import admin from 'firebase-admin';
+import admin, { database } from 'firebase-admin';
 
 /**
  * Authorizes the app with Firebase
@@ -70,7 +70,7 @@ export async function getAuth(db) {
  * @param {string} refreshToken The refresh token
  * @param {*} db An instance of the Firestore database
  */
-export async function setAuth(accessToken, expiresAt, refreshToken, db) {
+export async function setAuth(accessToken: string, expiresAt: number, refreshToken: string, db: any) {
     await db.collection("strava-auth").doc("auth").set({
         access_token: accessToken,
         expires_at: expiresAt,
